@@ -106,10 +106,13 @@ public class UsersController : VersionNeutralApiController
     [ApiConventionMethod(typeof(FSHApiConventions), nameof(FSHApiConventions.Register))]
     public Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
-        return _userService.ForgotPasswordAsync(request, GetOriginFromRequest());
+        var origin = Request.Headers["origin"];
+        return _userService.ForgotPasswordAsync(request, origin);
     }
 
     [HttpPost("reset-password")]
+    [AllowAnonymous]
+    [TenantIdHeader]
     [OpenApiOperation("Reset a user's password.", "")]
     [ApiConventionMethod(typeof(FSHApiConventions), nameof(FSHApiConventions.Register))]
     public Task<string> ResetPasswordAsync(ResetPasswordRequest request)
@@ -118,4 +121,64 @@ public class UsersController : VersionNeutralApiController
     }
 
     private string GetOriginFromRequest() => $"{Request.Scheme}://{Request.Host.Value}{Request.PathBase.Value}";
+
+    #region My Customize
+
+    [HttpGet("GetByUserName")]
+    [MustHavePermission(FSHAction.View, FSHResource.Users)]
+    [OpenApiOperation("Get a user's details by UserName.", "")]
+    public Task<UserDetailsDto> GetByUserNameAsync(string userName, CancellationToken cancellationToken)
+    {
+        return _userService.GetByUserNameAsync(userName, cancellationToken);
+    }
+
+    [HttpPut("update")]
+    [MustHavePermission(FSHAction.Update, FSHResource.Users)]
+    [OpenApiOperation("Update profile details of user.", "")]
+    public async Task<ActionResult> UpdateUserAsync(UpdateUserRequest request)
+    {
+        string? origin = GetOriginFromRequest();
+        await _userService.UpdateAsync(request, origin);
+        return Ok();
+    }
+
+    [HttpPost("{id}/verification-email")]
+    [MustHavePermission(FSHAction.Update, FSHResource.Users)]
+    [ApiConventionMethod(typeof(FSHApiConventions), nameof(FSHApiConventions.Register))]
+    [OpenApiOperation("Send a user's verification email.", "")]
+    public async Task<ActionResult> SendVerificationEmailAsync(string userId, CancellationToken cancellationToken)
+    {
+        string? origin = GetOriginFromRequest();
+        await _userService.SendVerificationEmailAsync(userId, origin, cancellationToken);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [MustHavePermission(FSHAction.Delete, FSHResource.Users)]
+
+    [OpenApiOperation("Delete a User.", "")]
+    public Task<string> DeleteAsync(string id, CancellationToken cancellationToken)
+    {
+        return _userService.DeleteAsync(id, cancellationToken);
+    }
+
+    [HttpPost("export")]
+    [MustHavePermission(FSHAction.Export, FSHResource.Users)]
+    [OpenApiOperation("Export a users using available filters.", "")]
+    public async Task<FileResult> ExportAsync(UserListFilter filter, CancellationToken cancellationToken)
+    {
+        var result = await _userService.ExportAsync(filter, cancellationToken);
+
+        return File(result, "application/octet-stream", "UserExports");
+    }
+
+    [HttpPost("search")]
+    [MustHavePermission(FSHAction.Search, FSHResource.Users)]
+    [OpenApiOperation("Search user using available filters.", "")]
+    public async Task<PaginationResponse<UserDetailsDto>> SearchAsync(UserListFilter filter, CancellationToken cancellationToken)
+    {
+        return await _userService.SearchAsync(filter, cancellationToken);
+    }
+
+    #endregion
 }

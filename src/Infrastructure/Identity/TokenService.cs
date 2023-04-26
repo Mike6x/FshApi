@@ -1,4 +1,6 @@
+using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +20,7 @@ namespace FSH.WebApi.Infrastructure.Identity;
 
 internal class TokenService : ITokenService
 {
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IStringLocalizer _t;
     private readonly SecuritySettings _securitySettings;
@@ -25,12 +28,14 @@ internal class TokenService : ITokenService
     private readonly FSHTenantInfo? _currentTenant;
 
     public TokenService(
+        SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         IOptions<JwtSettings> jwtSettings,
         IStringLocalizer<TokenService> localizer,
         FSHTenantInfo? currentTenant,
         IOptions<SecuritySettings> securitySettings)
     {
+        _signInManager = signInManager;
         _userManager = userManager;
         _t = localizer;
         _jwtSettings = jwtSettings.Value;
@@ -40,24 +45,28 @@ internal class TokenService : ITokenService
 
     public async Task<TokenResponse> GetTokenAsync(TokenRequest request, string ipAddress, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(_currentTenant?.Id)
-            || await _userManager.FindByEmailAsync(request.Email.Trim().Normalize()) is not { } user
-            || !await _userManager.CheckPasswordAsync(user, request.Password))
+        // if (string.IsNullOrWhiteSpace(_currentTenant?.Id)
+        //    || user == null
+        //    || !await _userManager.CheckPasswordAsync(user, request.Password))
+        // {
+        //    throw new UnauthorizedException(_t["Authentication Failed."]);
+        // }
+
+        // if (string.IsNullOrWhiteSpace(_currentTenant?.Id)
+        //    || await _userManager.FindByEmailAsync(request.Email.Trim().Normalize()) is not { } user
+        //    || !await _userManager.CheckPasswordAsync(user, request.Password))
+        // {
+        //    throw new UnauthorizedException(_t["Authentication Failed."]);
+        // }
+
+        #region My customize
+
+        if (_currentTenant == null || string.IsNullOrWhiteSpace(_currentTenant?.Id))
         {
-            throw new UnauthorizedException(_t["Authentication Failed."]);
+            throw new UnauthorizedException(_t["Tenant Not Found."]);
         }
 
-        if (!user.IsActive)
-        {
-            throw new UnauthorizedException(_t["User Not Active. Please contact the administrator."]);
-        }
-
-        if (_securitySettings.RequireConfirmedAccount && !user.EmailConfirmed)
-        {
-            throw new UnauthorizedException(_t["E-Mail not confirmed."]);
-        }
-
-        if (_currentTenant.Id != MultitenancyConstants.Root.Id)
+        if (_currentTenant?.Id != MultitenancyConstants.Root.Id)
         {
             if (!_currentTenant.IsActive)
             {
@@ -70,6 +79,58 @@ internal class TokenService : ITokenService
             }
         }
 
+        ApplicationUser? user;
+        if (IsValidEmail(request.Email))
+        {
+            user = await _userManager.FindByEmailAsync(request.Email.Trim().Normalize());
+        }
+        else
+        {
+            user = await _userManager.FindByNameAsync(request.Email);
+        }
+
+        if (user == null)
+        {
+            throw new UnauthorizedException(_t["Invalid Email or User Name."]);
+        }
+
+        if (!user.IsActive)
+        {
+            throw new UnauthorizedException(_t["User Not Active. Please contact the administrator."]);
+        }
+
+        if (_securitySettings.RequireConfirmedAccount && !user.EmailConfirmed)
+        {
+            throw new UnauthorizedException(_t["E-Mail not yet confirmed."]);
+        }
+
+        var signInResult = await _signInManager.PasswordSignInAsync(user?.UserName, request.Password, true, true);
+
+        if (signInResult.IsLockedOut)
+        {
+            var logoutEndDate = await _userManager.GetLockoutEndDateAsync(user);
+            throw new UnauthorizedException(string.Format(_t["Your account is locked out until {0}."], logoutEndDate.Value.LocalDateTime.ToString()));
+        }
+        else
+        if (!signInResult.Succeeded)
+        {
+            throw new UnauthorizedException(_t["Wrong Password."]);
+        }
+
+        #endregion
+
+        // if (_currentTenant.Id != MultitenancyConstants.Root.Id)
+        // {
+        //    if (!_currentTenant.IsActive)
+        //    {
+        //        throw new UnauthorizedException(_t["Tenant is not Active. Please contact the Application Administrator."]);
+        //    }
+        //    if (DateTime.UtcNow > _currentTenant.ValidUpto)
+        //    {
+        //        throw new UnauthorizedException(_t["Tenant Validity Has Expired. Please contact the Application Administrator."]);
+        //    }
+        // }
+
         return await GenerateTokensAndUpdateUser(user, ipAddress);
     }
 
@@ -77,11 +138,7 @@ internal class TokenService : ITokenService
     {
         var userPrincipal = GetPrincipalFromExpiredToken(request.Token);
         string? userEmail = userPrincipal.GetEmail();
-        var user = await _userManager.FindByEmailAsync(userEmail!);
-        if (user is null)
-        {
-            throw new UnauthorizedException(_t["Authentication Failed."]);
-        }
+        var user = await _userManager.FindByEmailAsync(userEmail!) ?? throw new UnauthorizedException(_t["Authentication Failed."]);
 
         if (user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
         {
@@ -167,5 +224,18 @@ internal class TokenService : ITokenService
     {
         byte[] secret = Encoding.UTF8.GetBytes(_jwtSettings.Key);
         return new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256);
+    }
+
+    private static bool IsValidEmail(string emailaddress)
+    {
+        try
+        {
+            MailAddress m = new(emailaddress);
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
     }
 }

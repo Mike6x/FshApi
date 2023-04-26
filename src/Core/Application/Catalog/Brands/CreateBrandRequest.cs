@@ -2,8 +2,11 @@ namespace FSH.WebApi.Application.Catalog.Brands;
 
 public class CreateBrandRequest : IRequest<Guid>
 {
+    public int Order { get; set; }
+    public string Code { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
+    public bool? IsActive { get; set; }
 }
 
 public class CreateBrandRequestValidator : CustomValidator<CreateBrandRequest>
@@ -25,7 +28,12 @@ public class CreateBrandRequestHandler : IRequestHandler<CreateBrandRequest, Gui
 
     public async Task<Guid> Handle(CreateBrandRequest request, CancellationToken cancellationToken)
     {
-        var brand = new Brand(request.Name, request.Description);
+        var brand = new Brand(
+            request.Order,
+            request.Code,
+            request.Name,
+            request.Description,
+            request.IsActive ?? true);
 
         await _repository.AddAsync(brand, cancellationToken);
 

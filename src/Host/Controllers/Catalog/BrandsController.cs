@@ -1,9 +1,16 @@
 ﻿using FSH.WebApi.Application.Catalog.Brands;
+using FSH.WebApi.Application.Common.DataIO;
 
 namespace FSH.WebApi.Host.Controllers.Catalog;
 
 public class BrandsController : VersionedApiController
 {
+    private readonly IExcelReader _excelReader;
+    public BrandsController(IExcelReader excelReader)
+    {
+        _excelReader = excelReader;
+    }
+
     [HttpPost("search")]
     [MustHavePermission(FSHAction.Search, FSHResource.Brands)]
     [OpenApiOperation("Search brands using available filters.", "")]
@@ -44,6 +51,23 @@ public class BrandsController : VersionedApiController
     public Task<Guid> DeleteAsync(Guid id)
     {
         return Mediator.Send(new DeleteBrandRequest(id));
+    }
+
+    [HttpPost("export")]
+    [MustHavePermission(FSHAction.Export, FSHResource.Brands)]
+    [OpenApiOperation("Export a brands.", "")]
+    public async Task<FileResult> ExportAsync(ExportBrandsRequest filter)
+    {
+        var result = await Mediator.Send(filter);
+        return File(result, "application/octet-stream", "BrandExports");
+    }
+
+    [HttpPost("import")]
+    [MustHavePermission(FSHAction.Import, FSHResource.Brands)]
+    [OpenApiOperation("Import a brands.", "")]
+    public async Task<ActionResult<int>> ImportAsync(ImportBrandsRequest request)
+    {
+        return Ok(await Mediator.Send(request));
     }
 
     [HttpPost("generate-random")]

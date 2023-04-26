@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using FSH.WebApi.Application.Common.DataIO;
 using FSH.WebApi.Application.Common.FileStorage;
 using FSH.WebApi.Domain.Common;
@@ -37,15 +38,18 @@ public class ExcelReader : IExcelReader
                     {
                         try
                         {
-                            var type = prop.PropertyType;
+                            var propertyType = prop.PropertyType;
                             var col = columns.SingleOrDefault(c => c.Value.ToString() == prop.Name);
                             if (col == null) continue;
 
-                            object? obj = GetObjectByDataType(type, row.Cell(col.Index).Value);
-                            prop.SetValue(item, obj);
+                            // object? obj = GetObjectByDataType(propertyType, row.Cell(col.Index).Value);
+                            object? obj = GetObjByDataType(propertyType, row.Cell(col.Index).Value);
+                            if(obj != null) prop.SetValue(item, obj);
                         }
                         catch
                         {
+                            // if any error
+                            // return await Task.FromResult(new List<T>());
                         }
                     }
 
@@ -57,52 +61,92 @@ public class ExcelReader : IExcelReader
         return await Task.FromResult(list);
     }
 
-    private static object? GetObjectByDataType(Type propertyType, XLCellValue cellValue)
+    private static object? GetObjByDataType(Type propertyType, object o)
     {
-        if (cellValue.ToString() == "null" || cellValue.IsBlank)
+        object? val;
+        if (o.ToString() == "null" || o.ToString()?.Length == 0)
         {
             return null;
         }
-
-        object? val;
-
+        else
         if (propertyType.IsEnum)
         {
-            val = Convert.ToInt32(cellValue.GetNumber());
+            val = Convert.ToInt32(o);
             return Enum.ToObject(propertyType, val);
         }
         else if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
         {
-            val = Guid.Parse(cellValue.ToString());
-
+            val = Guid.Parse(o.ToString());
         }
         else if (propertyType == typeof(int) || propertyType == typeof(int?))
         {
-            val = Convert.ToInt32(cellValue.GetNumber());
+            val = Convert.ToInt32(o);
         }
         else if (propertyType == typeof(decimal))
         {
-            val = Convert.ToDecimal(cellValue.GetNumber());
+            val = Convert.ToDecimal(o);
         }
         else if (propertyType == typeof(long))
         {
-            val = Convert.ToInt64(cellValue.GetNumber());
+            val = Convert.ToInt64(o);
         }
         else if (propertyType == typeof(bool) || propertyType == typeof(bool?))
         {
-            val = Convert.ToBoolean(cellValue.GetBoolean());
+            val = Convert.ToBoolean(o);
         }
         else if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
         {
-            val = Convert.ToDateTime(cellValue.GetDateTime());
+            val = Convert.ToDateTime(o);
         }
         else
         {
-            val = cellValue.ToString();
+            val = o.ToString();
         }
-
-         // return val;
 
         return Convert.ChangeType(val, Nullable.GetUnderlyingType(propertyType) ?? propertyType);
     }
+
+    // private static object? GetObjectByDataType(Type propertyType, XLCellValue cellValue)
+    // {
+    //    if (cellValue.ToString() == "null" || cellValue.IsBlank)
+    //    {
+    //        return null;
+    //    }
+    //    object? val;
+    //    if (propertyType.IsEnum)
+    //    {
+    //        val = Convert.ToInt32(cellValue.GetNumber());
+    //        return Enum.ToObject(propertyType, val);
+    //    }
+    //    else if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
+    //    {
+    //        val = Guid.Parse(cellValue.ToString());
+    //    }
+    //    else if (propertyType == typeof(int) || propertyType == typeof(int?))
+    //    {
+    //        val = Convert.ToInt32(cellValue.GetNumber());
+    //    }
+    //    else if (propertyType == typeof(decimal))
+    //    {
+    //        val = Convert.ToDecimal(cellValue.GetNumber());
+    //    }
+    //    else if (propertyType == typeof(long))
+    //    {
+    //        val = Convert.ToInt64(cellValue.GetNumber());
+    //    }
+    //    else if (propertyType == typeof(bool) || propertyType == typeof(bool?))
+    //    {
+    //        val = Convert.ToBoolean(cellValue.GetBoolean());
+    //    }
+    //    else if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
+    //    {
+    //        val = Convert.ToDateTime(cellValue.GetDateTime());
+    //    }
+    //    else
+    //    {
+    //        val = cellValue.ToString();
+    //    }
+    //     // return val;
+    //    return Convert.ChangeType(val, Nullable.GetUnderlyingType(propertyType) ?? propertyType);
+    // }
 }

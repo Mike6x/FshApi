@@ -3,4 +3,5 @@
 public interface IExcelWriter : ITransientService
 {
     Stream WriteToStream<T>(IList<T> data);
+    Stream WriteToTemplate<T>(T data, string templateFile);
 }

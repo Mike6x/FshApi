@@ -1,10 +1,13 @@
 namespace FSH.WebApi.Application.Catalog.Brands;
 
-public class UpdateBrandRequest : IRequest<Guid>
+public class UpdateBrandRequest : IRequest<DefaultIdType>
 {
-    public Guid Id { get; set; }
+    public DefaultIdType Id { get; set; }
+    public int Order { get; set; }
+    public string Code { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
+    public bool IsActive { get; set; }
 }
 
 public class UpdateBrandRequestValidator : CustomValidator<UpdateBrandRequest>
@@ -19,7 +22,7 @@ public class UpdateBrandRequestValidator : CustomValidator<UpdateBrandRequest>
                 .WithMessage((_, name) => T["Brand {0} already Exists.", name]);
 }
 
-public class UpdateBrandRequestHandler : IRequestHandler<UpdateBrandRequest, Guid>
+public class UpdateBrandRequestHandler : IRequestHandler<UpdateBrandRequest, DefaultIdType>
 {
     // Add Domain Events automatically by using IRepositoryWithEvents
     private readonly IRepositoryWithEvents<Brand> _repository;
@@ -28,14 +31,14 @@ public class UpdateBrandRequestHandler : IRequestHandler<UpdateBrandRequest, Gui
     public UpdateBrandRequestHandler(IRepositoryWithEvents<Brand> repository, IStringLocalizer<UpdateBrandRequestHandler> localizer) =>
         (_repository, _t) = (repository, localizer);
 
-    public async Task<Guid> Handle(UpdateBrandRequest request, CancellationToken cancellationToken)
+    public async Task<DefaultIdType> Handle(UpdateBrandRequest request, CancellationToken cancellationToken)
     {
         var brand = await _repository.GetByIdAsync(request.Id, cancellationToken);
 
         _ = brand
         ?? throw new NotFoundException(_t["Brand {0} Not Found.", request.Id]);
 
-        brand.Update(request.Name, request.Description);
+        brand.Update(request.Order, request.Code, request.Name, request.Description, request.IsActive);
 
         await _repository.UpdateAsync(brand, cancellationToken);
 

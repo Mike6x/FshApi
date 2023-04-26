@@ -24,6 +24,7 @@ public class UpdateUserRequestValidator : CustomValidator<UpdateUserRequest>
 
         RuleFor(p => p.Image);
 
+        // .InjectValidator();
         RuleFor(u => u.PhoneNumber).Cascade(CascadeMode.Stop)
             .MustAsync(async (user, phone, _) => !await userService.ExistsWithPhoneNumberAsync(phone!, user.Id))
                 .WithMessage((_, phone) => string.Format(T["Phone number {0} is already registered."], phone))

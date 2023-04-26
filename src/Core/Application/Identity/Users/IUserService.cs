@@ -28,7 +28,12 @@ public interface IUserService : ITransientService
 
     Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal);
     Task<string> CreateAsync(CreateUserRequest request, string origin);
-    Task UpdateAsync(UpdateUserRequest request, string userId);
+
+    /// <summary>
+    /// Old value.
+    /// UpdateAsync(UpdateUserRequest request, string userId).
+    /// </summary>
+    Task UpdateAsync(UpdateUserRequest request, string origin);
 
     Task<string> ConfirmEmailAsync(string userId, string code, string tenant, CancellationToken cancellationToken);
     Task<string> ConfirmPhoneNumberAsync(string userId, string code);
@@ -36,4 +41,12 @@ public interface IUserService : ITransientService
     Task<string> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
     Task<string> ResetPasswordAsync(ResetPasswordRequest request);
     Task ChangePasswordAsync(ChangePasswordRequest request, string userId);
+
+    #region My Customize
+    Task<UserDetailsDto> GetByUserNameAsync(string userName, CancellationToken cancellationToken);
+    Task SendVerificationEmailAsync(string userId, string origin, CancellationToken cancellationToken);
+    Task<Stream> ExportAsync(UserListFilter filter, CancellationToken cancellationToken);
+    Task<string> DeleteAsync(string userId, CancellationToken cancellationToken);
+
+    #endregion
 }

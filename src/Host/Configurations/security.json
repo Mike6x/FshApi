@@ -1,7 +1,7 @@
 {
   "SecuritySettings": {
     "Provider": "Jwt",
-    "RequireConfirmedAccount":true,
+    "RequireConfirmedAccount": true,
     "JwtSettings": {
       "key": "S0M3RAN0MS3CR3T!1!MAG1C!1!",
       "tokenExpirationInMinutes": 60,
@@ -9,11 +9,11 @@
     },
     "AzureAd": {
       "Instance": "https://login.microsoftonline.com/",
-      "Domain": "<Your Domain>.onmicrosoft.com",
-      "TenantId": "organizations",
-      "ClientId": "<Your ClientId of the AzureAd Server App Registration>",
+      "Domain": "tarajsc.onmicrosoft.com",
+      "TenantId": "e9a375ab-a320-4142-b307-172ab0acb020",
+      "ClientId": "b185d94c-c0f4-4213-8955-c6646dd0a772",
       "Scopes": "access_as_user",
-      "RootIssuer": "https://sts.windows.net/<Your AzureAd TenantId>/"
+      "RootIssuer": "https://sts.windows.net/e9a375ab-a320-4142-b307-172ab0acb020"
     },
     "Swagger": {
       "AuthorizationUrl": "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize",
@@ -23,3 +23,30 @@
     }
   }
 }
+
+
+//{
+//  "SecuritySettings": {
+//    "Provider": "Jwt",
+//    "RequireConfirmedAccount": true,
+//    "JwtSettings": {
+//      "key": "S0M3RAN0MS3CR3T!1!MAG1C!1!",
+//      "tokenExpirationInMinutes": 60,
+//      "refreshTokenExpirationInDays": 7
+//    },
+//    "AzureAd": {
+//      "Instance": "https://login.microsoftonline.com/",
+//      "Domain": "<Your Domain>.onmicrosoft.com",
+//      "TenantId": "organizations",
+//      "ClientId": "<Your ClientId of the AzureAd Server App Registration>",
+//      "Scopes": "access_as_user",
+//      "RootIssuer": "https://sts.windows.net/<Your AzureAd TenantId>/"
+//    },
+//    "Swagger": {
+//      "AuthorizationUrl": "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize",
+//      "TokenUrl": "https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
+//      "ApiScope": "api://<Your ClientId of the AzureAd Server App Registration>/access_as_user",
+//      "OpenIdClientId": "<Your ClientId of the AzureAd Client App Registration>"
+//    }
+//  }
+//}

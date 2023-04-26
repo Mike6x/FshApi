@@ -10,6 +10,7 @@ using FSH.WebApi.Application.Common.Mailing;
 using FSH.WebApi.Application.Common.Models;
 using FSH.WebApi.Application.Common.Specification;
 using FSH.WebApi.Application.Identity.Users;
+using FSH.WebApi.Domain.Common;
 using FSH.WebApi.Domain.Identity;
 using FSH.WebApi.Infrastructure.Auth;
 using FSH.WebApi.Infrastructure.Persistence.Context;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using FSH.WebApi.Application.Common.DataIO;
 
 namespace FSH.WebApi.Infrastructure.Identity;
 
@@ -39,6 +41,8 @@ internal partial class UserService : IUserService
     private readonly ICacheKeyService _cacheKeys;
     private readonly ITenantInfo _currentTenant;
 
+    private readonly IExcelWriter _excelWriter;
+
     public UserService(
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
@@ -53,7 +57,8 @@ internal partial class UserService : IUserService
         ICacheService cache,
         ICacheKeyService cacheKeys,
         ITenantInfo currentTenant,
-        IOptions<SecuritySettings> securitySettings)
+        IOptions<SecuritySettings> securitySettings,
+        IExcelWriter excelWriter)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -69,6 +74,7 @@ internal partial class UserService : IUserService
         _cacheKeys = cacheKeys;
         _currentTenant = currentTenant;
         _securitySettings = securitySettings.Value;
+        _excelWriter = excelWriter;
     }
 
     public async Task<PaginationResponse<UserDetailsDto>> SearchAsync(UserListFilter filter, CancellationToken cancellationToken)

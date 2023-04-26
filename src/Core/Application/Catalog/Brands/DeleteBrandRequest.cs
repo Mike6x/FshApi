@@ -1,4 +1,5 @@
-﻿using FSH.WebApi.Application.Catalog.Products;
+﻿using FSH.WebApi.Application.Production.Products;
+using FSH.WebApi.Domain.Production;
 
 namespace FSH.WebApi.Application.Catalog.Brands;
 

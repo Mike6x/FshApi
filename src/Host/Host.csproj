@@ -12,13 +12,15 @@
     <ItemGroup>
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="Hangfire.Console.Extensions.Serilog" Version="1.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
-        <PackageReference Include="Microsoft.NET.Build.Containers" Version="0.4.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+        <!--<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />-->
+        <PackageReference Include="Microsoft.NET.Build.Containers" Version="7.0.304" />
+        <!--<PackageReference Include="Microsoft.NET.Build.Containers" Version="0.4.0" />-->
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Core\Application\Application.csproj" />
@@ -36,6 +38,12 @@
         <None Update="Files\full-stack-hero-logo.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Templates\AssetsDelivery.xltx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Templates\AssetsDeliveryTemplate.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="Email Templates\*.html">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -51,9 +59,10 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Databases\Host\" />
+      <Folder Include="Output\" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Update="Roslynator.Analyzers" Version="4.2.0">
+      <PackageReference Update="Roslynator.Analyzers" Version="4.3.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
