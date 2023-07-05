@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace FSH.WebApi.Infrastructure.Chat;
-
 public class DeleteChatMessageRequest : IRequest<DefaultIdType>
 {
     public DefaultIdType Id { get; set; }

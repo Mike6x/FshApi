@@ -9,10 +9,9 @@ public class CreateChatMessageRequestValidator : CustomValidator<CreateChatMessa
     {
         RuleFor(e => e.ToUserId)
             .NotEmpty()
-            .MaximumLength(75);
+            .MaximumLength(256);
 
         RuleFor(e => e.Message)
-            .NotEmpty()
             .MaximumLength(256);
     }
 }
@@ -23,7 +22,7 @@ public class UpdateChatMessageRequestValidator : CustomValidator<UpdateChatMessa
     {
         RuleFor(e => e.ToUserId)
             .NotEmpty()
-            .MaximumLength(75);
+            .MaximumLength(256);
 
         RuleFor(e => e.Message)
             .NotEmpty()

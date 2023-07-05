@@ -179,6 +179,26 @@ public class UsersController : VersionNeutralApiController
     {
         return await _userService.SearchAsync(filter, cancellationToken);
     }
+    #endregion
+
+    #region Chat Users
+    [HttpGet("{contactId}/chatusers")]
+    [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
+    [OpenApiOperation("Get list of all chat users.", "")]
+    public async Task<List<UserDetailsDto>> GetChatUsersAsync(string contactId, CancellationToken cancellationToken)
+    {
+        var list = await _userService.GetListAsync(cancellationToken);
+
+        return list.Where(user => user.Id.ToString() != contactId).ToList();
+    }
+
+    [HttpGet("{id}/chatuser")]
+    [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
+    [OpenApiOperation("Get a chatuser's details.", "")]
+    public Task<UserDetailsDto> GetChatUserAsync(string id, CancellationToken cancellationToken)
+    {
+        return _userService.GetAsync(id, cancellationToken);
+    }
 
     #endregion
 }

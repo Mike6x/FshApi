@@ -12,9 +12,9 @@ public class SearchChatMessagesRequest : PaginationFilter, IRequest<PaginationRe
 
 public class SearchChatMessagesRequestHandler : IRequestHandler<SearchChatMessagesRequest, PaginationResponse<ChatMessageDto>>
 {
-    private readonly IReadRepository<ChatMessage> _repository;
+    private readonly IRepository<ChatMessage> _repository;
 
-    public SearchChatMessagesRequestHandler(IReadRepository<ChatMessage> repository) => _repository = repository;
+    public SearchChatMessagesRequestHandler(IRepository<ChatMessage> repository) => _repository = repository;
 
     public async Task<PaginationResponse<ChatMessageDto>> Handle(SearchChatMessagesRequest request, CancellationToken cancellationToken)
     {

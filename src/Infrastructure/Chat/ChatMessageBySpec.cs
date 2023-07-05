@@ -13,7 +13,7 @@ public class ChatMessageByFromUserSpec : Specification<ChatMessage>, ISingleResu
 {
     public ChatMessageByFromUserSpec(string fromUserId) =>
         Query
-            .Where(e => e.FromUser.ToString() == fromUserId);
+            .Where(e => e.FromUserId == fromUserId);
 }
 
 public class ChatMessageByToUserSpec : Specification<ChatMessage>, ISingleResultSpecification<ChatMessage>

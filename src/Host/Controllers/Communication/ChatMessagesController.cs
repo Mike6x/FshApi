@@ -1,14 +1,24 @@
-﻿using FSH.WebApi.Infrastructure.Chat;
+﻿using FSH.WebApi.Application.Common.Interfaces;
+using FSH.WebApi.Infrastructure.Chat;
 
 namespace FSH.WebApi.Host.Controllers.Communication;
 
 public class ChatMessagesController : VersionedApiController
 {
-    // private readonly IExcelReader _excelReader;
-    // public ChatMessagesController(IExcelReader excelReader)
-    // {
-    //    _excelReader = excelReader;
-    // }
+    private readonly ICurrentUser _currentUserService;
+
+    public ChatMessagesController(ICurrentUser currentUserService)
+    {
+        _currentUserService = currentUserService;
+    }
+
+    [HttpGet("{contactId}/conversation")]
+    [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
+    [OpenApiOperation("Get ChatMessage Conversation with Other .", "")]
+    public async Task<List<ChatMessageDto>> GetConversationAsync(string contactId)
+    {
+        return await Mediator.Send(new GetChatConversationRequest(_currentUserService.GetUserId().ToString(), contactId));
+    }
 
     [HttpPost("search")]
     [MustHavePermission(FSHAction.Search, FSHResource.ChatMessages)]
@@ -68,5 +78,4 @@ public class ChatMessagesController : VersionedApiController
     {
         return Ok(await Mediator.Send(request));
     }
-
 }

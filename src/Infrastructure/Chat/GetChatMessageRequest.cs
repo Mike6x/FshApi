@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace FSH.WebApi.Infrastructure.Chat;
-
 public class GetChatMessageRequest : IRequest<ChatMessageDetailsDto>
 {
     public DefaultIdType Id { get; set; }

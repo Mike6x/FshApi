@@ -5,17 +5,16 @@ using FSH.WebApi.Application.Common.Specification;
 using MediatR;
 
 namespace FSH.WebApi.Infrastructure.Chat;
-
 public class ExportChatMessagesRequest : BaseFilter, IRequest<Stream>
 {
 }
 
 public class ExportChatMessagesRequestHandler : IRequestHandler<ExportChatMessagesRequest, Stream>
 {
-    private readonly IReadRepository<ChatMessage> _repository;
+    private readonly IRepository<ChatMessage> _repository;
     private readonly IExcelWriter _excelWriter;
 
-    public ExportChatMessagesRequestHandler(IReadRepository<ChatMessage> repository, IExcelWriter excelWriter)
+    public ExportChatMessagesRequestHandler(IRepository<ChatMessage> repository, IExcelWriter excelWriter)
     {
         _repository = repository;
         _excelWriter = excelWriter;

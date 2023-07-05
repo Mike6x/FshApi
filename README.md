@@ -117,6 +117,10 @@ dotnet tool update FSH.CLI --global
 fsh update
 ```
 ### Forking the Repository
+ dotnet tool update dotnet-ef --version 7.0.7
+dotnet tool update --global dotnet-ef
+dotnet tool uninstall dotnet-ef --global   
+
 
 You would probably need to take this approach if you want to keep your source code upto date with the latest changes. To get started based on this repository, you need to get a copy locally. You have three options: fork, clone, or download.
 

@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace FSH.WebApi.Infrastructure.Chat;
-
 public class ImportChatMessagesRequest : IRequest<int>
 {
     public FileUploadRequest ExcelFile { get; set; } = default!;

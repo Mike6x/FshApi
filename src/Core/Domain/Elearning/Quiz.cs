@@ -1,6 +1,4 @@
-﻿using FSH.WebApi.Domain.Catalog;
-
-namespace FSH.WebApi.Domain.Elearning;
+﻿namespace FSH.WebApi.Domain.Elearning;
 public class Quiz : AuditableEntity, IAggregateRoot
 {
     public string Code { get; private set; } = default!;

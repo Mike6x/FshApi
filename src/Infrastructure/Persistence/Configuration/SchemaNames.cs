@@ -26,4 +26,5 @@ internal static class SchemaNames
     public static string Sale = nameof(Sale);
 
     public static string Elearning = nameof(Elearning);
+    public static string Communication = nameof(Communication);
 }

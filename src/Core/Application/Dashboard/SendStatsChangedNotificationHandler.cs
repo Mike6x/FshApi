@@ -1,4 +1,5 @@
 using FSH.WebApi.Domain.Common.Events;
+using FSH.WebApi.Domain.Communication;
 using FSH.WebApi.Domain.Identity;
 using FSH.WebApi.Domain.Production;
 using FSH.WebApi.Domain.Property;
@@ -22,6 +23,8 @@ public class SendStatsChangedNotificationHandler :
     IEventNotificationHandler<EntityDeletedEvent<Product>>,
     IEventNotificationHandler<EntityCreatedEvent<Asset>>,
     IEventNotificationHandler<EntityDeletedEvent<Asset>>,
+
+    IEventNotificationHandler<ChatMessageCreatedEvent>,
 
     IEventNotificationHandler<ApplicationRoleCreatedEvent>,
     IEventNotificationHandler<ApplicationRoleDeletedEvent>,
@@ -63,6 +66,9 @@ public class SendStatsChangedNotificationHandler :
     SendStatsChangedNotification(notification.Event, cancellationToken);
     public Task Handle(EventNotification<EntityDeletedEvent<Asset>> notification, CancellationToken cancellationToken) =>
         SendStatsChangedNotification(notification.Event, cancellationToken);
+
+    public Task Handle(EventNotification<ChatMessageCreatedEvent> notification, CancellationToken cancellationToken) =>
+    SendStatsChangedNotification(notification.Event, cancellationToken);
 
     public Task Handle(EventNotification<ApplicationRoleCreatedEvent> notification, CancellationToken cancellationToken) =>
         SendStatsChangedNotification(notification.Event, cancellationToken);
