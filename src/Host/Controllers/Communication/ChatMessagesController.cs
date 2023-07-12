@@ -1,23 +1,28 @@
-﻿using FSH.WebApi.Application.Common.Interfaces;
-using FSH.WebApi.Infrastructure.Chat;
+﻿using FSH.WebApi.Infrastructure.Chat;
 
 namespace FSH.WebApi.Host.Controllers.Communication;
 
 public class ChatMessagesController : VersionedApiController
 {
-    private readonly ICurrentUser _currentUserService;
+    // private readonly ICurrentUser _currentUserService;
+    // public ChatMessagesController(ICurrentUser currentUserService)
+    // {
+    //    _currentUserService = currentUserService;
+    // }
+    // [HttpGet("{contactId}/conversation")]
+    // [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
+    // [OpenApiOperation("Get ChatMessage Conversation with Other .", "")]
+    // public async Task<List<ChatMessageDto>> GetChatHistoryAsync(string contactId)
+    // {
+    //    return await Mediator.Send(new GetChatConversationRequest(_currentUserService.GetUserId().ToString(), contactId));
+    // }
 
-    public ChatMessagesController(ICurrentUser currentUserService)
-    {
-        _currentUserService = currentUserService;
-    }
-
-    [HttpGet("{contactId}/conversation")]
+    [HttpGet("conversation/{userId}/{contactId}")]
     [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
     [OpenApiOperation("Get ChatMessage Conversation with Other .", "")]
-    public async Task<List<ChatMessageDto>> GetConversationAsync(string contactId)
+    public async Task<List<ChatMessageDto>> GetConversationAsync(string userId, string contactId)
     {
-        return await Mediator.Send(new GetChatConversationRequest(_currentUserService.GetUserId().ToString(), contactId));
+        return await Mediator.Send(new GetChatConversationRequest(userId, contactId));
     }
 
     [HttpPost("search")]

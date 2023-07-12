@@ -4,10 +4,7 @@ public abstract class ChatMessageEvent : DomainEvent
 {
     public DefaultIdType Id { get; set; } = default!;
 
-    protected ChatMessageEvent(DefaultIdType id)
-    {
-        Id = id;
-    }
+    protected ChatMessageEvent(DefaultIdType id) => Id = id;
 }
 
 public class ChatMessageCreatedEvent : ChatMessageEvent
