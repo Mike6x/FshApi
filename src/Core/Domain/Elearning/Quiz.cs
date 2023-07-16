@@ -9,7 +9,12 @@ public class Quiz : AuditableEntity, IAggregateRoot
     public DateTime EndTime { get; private set; }
     public bool IsActive { get; private set; }
     public QuizType QuizType { get; private set; } = QuizType.graded;
-    public QuizTopic QuizTopic { get; private set; } = QuizTopic.General;
+    public QuizTopic QuizTopic { get; set; } = QuizTopic.General;
+    public QuizMode QuizMode { get; set; } = QuizMode.Practice;
+    public decimal? Price { get; private set; }
+    public int? Sale { get; private set; }
+    public int? RatingCount { get; private set; }
+    public decimal? Rating { get; private set; }
 
     public Quiz(
         string code,
@@ -20,7 +25,12 @@ public class Quiz : AuditableEntity, IAggregateRoot
         DateTime? endTime,
         bool isActive,
         QuizType quizType,
-        QuizTopic quizTopic)
+        QuizTopic quizTopic,
+        QuizMode quizMode,
+        decimal? price,
+        int? sale,
+        int? ratingCount,
+        decimal? rating)
     {
         Code = code;
         Name = name;
@@ -31,10 +41,15 @@ public class Quiz : AuditableEntity, IAggregateRoot
         IsActive = endTime >= DateTime.Today && isActive;
         QuizType = quizType;
         QuizTopic = quizTopic;
+        QuizMode = quizMode;
+        Sale = sale;
+        Price = price;
+        RatingCount = ratingCount;
+        Rating = rating;
     }
 
     public Quiz()
-    : this(string.Empty, string.Empty, string.Empty, string.Empty, DateTime.MinValue, DateTime.UtcNow, false, QuizType.graded, QuizTopic.General)
+    : this(string.Empty, string.Empty, string.Empty, string.Empty, DateTime.MinValue, DateTime.UtcNow, false, QuizType.graded, QuizTopic.General, QuizMode.Practice, null, null, null, null)
     {
     }
 
@@ -47,7 +62,12 @@ public class Quiz : AuditableEntity, IAggregateRoot
     DateTime? endTime,
     bool isActive,
     QuizType? quizType,
-    QuizTopic? quizTopic)
+    QuizTopic? quizTopic,
+    QuizMode? quizMode,
+    decimal? price,
+    int? sale,
+    int? ratingCount,
+    decimal? rating)
     {
         if (code is not null && Code?.Equals(code) is not true) Code = code;
         if (name is not null && Name?.Equals(name) is not true) Name = name;
@@ -59,8 +79,13 @@ public class Quiz : AuditableEntity, IAggregateRoot
         IsActive = EndTime >= DateTime.Today && isActive;
 
         if (quizType is not null && !QuizType.Equals(quizType)) QuizType = (QuizType)quizType;
-        if (quizTopic is not null && QuizTopic.Equals(quizTopic) is not true) QuizTopic = (QuizTopic)quizTopic;
+        if (quizTopic is not null && !QuizTopic.Equals(quizTopic)) QuizTopic = (QuizTopic)quizTopic;
+        if (quizMode is not null && !QuizMode.Equals(quizMode)) QuizMode = (QuizMode)quizMode;
 
+        if (sale.HasValue && sale != Sale) Sale = sale;
+        if (price.HasValue && price != Price) Price = price;
+        if (ratingCount.HasValue && ratingCount != RatingCount) RatingCount = ratingCount;
+        if (rating.HasValue && rating != Rating) Rating = rating;
         return this;
     }
 

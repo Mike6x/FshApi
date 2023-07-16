@@ -107,12 +107,13 @@ public class UsersController : VersionNeutralApiController
     public Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
         var origin = Request.Headers["origin"];
-        return _userService.ForgotPasswordAsync(request, origin);
+        return _userService.ForgotPasswordAsync(request, origin!);
     }
 
     [HttpPost("reset-password")]
-    [AllowAnonymous]
-    [TenantIdHeader]
+
+    // [AllowAnonymous]
+    // [TenantIdHeader]
     [OpenApiOperation("Reset a user's password.", "")]
     [ApiConventionMethod(typeof(FSHApiConventions), nameof(FSHApiConventions.Register))]
     public Task<string> ResetPasswordAsync(ResetPasswordRequest request)
@@ -124,12 +125,28 @@ public class UsersController : VersionNeutralApiController
 
     #region My Customize
 
-    [HttpGet("GetByUserName")]
+    [HttpGet("{userName}/username")]
     [MustHavePermission(FSHAction.View, FSHResource.Users)]
     [OpenApiOperation("Get a user's details by UserName.", "")]
     public Task<UserDetailsDto> GetByUserNameAsync(string userName, CancellationToken cancellationToken)
     {
-        return _userService.GetByUserNameAsync(userName, cancellationToken);
+        return _userService.GetByNameAsync(userName, cancellationToken);
+    }
+
+    [HttpGet("{email}/email")]
+    [MustHavePermission(FSHAction.View, FSHResource.Users)]
+    [OpenApiOperation("Get a user's details by Email.", "")]
+    public Task<UserDetailsDto> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return _userService.GetByEmailAsync(email, cancellationToken);
+    }
+
+    [HttpGet("{phoneNumber}/PhoneNumber")]
+    [MustHavePermission(FSHAction.View, FSHResource.Users)]
+    [OpenApiOperation("Get a user's details by Phone Number.", "")]
+    public Task<UserDetailsDto> GetByPhoneAsync(string phoneNumber, CancellationToken cancellationToken)
+    {
+        return _userService.GetByPhoneAsync(phoneNumber, cancellationToken);
     }
 
     [HttpPut("update")]
@@ -159,6 +176,9 @@ public class UsersController : VersionNeutralApiController
     [OpenApiOperation("Delete a User.", "")]
     public Task<string> DeleteAsync(string id, CancellationToken cancellationToken)
     {
+        // var request = new RemoveChatMessagesRequest() { UserId = id };
+        // Mediator.Send(request, cancellationToken);
+
         return _userService.DeleteAsync(id, cancellationToken);
     }
 

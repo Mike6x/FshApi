@@ -15,8 +15,12 @@ public class UpdateQuizRequest : IRequest<Guid>
     public bool IsActive { get; set; }
     public QuizType QuizType { get; set; }
     public QuizTopic QuizTopic { get; set; }
-
+    public QuizMode QuizMode { get; set; }
     public bool DeleteCurrentQuiz { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Price { get; set; }
+    public int? RatingCount { get; set; }
+    public decimal? Rating { get; set; }
 
     public FileUploadRequest? QuizMedia { get; set; }
 }
@@ -41,19 +45,24 @@ public class UpdateQuizRequestHandler : IRequestHandler<UpdateQuizRequest, Guid>
         // Remove old quiz if flag is set
         if (request.DeleteCurrentQuiz)
         {
-            string? currentQuizPath = entity.QuizPath;
-            if (!string.IsNullOrEmpty(currentQuizPath))
+            if (!string.IsNullOrEmpty(entity.QuizPath))
             {
-                string root = Directory.GetCurrentDirectory();
-                _file.Remove(Path.Combine(root, currentQuizPath));
+                _file.RemoveFolder(entity.QuizPath);
             }
 
             entity = entity.ClearQuizPath();
         }
 
-        string? quizPath = request.QuizMedia is not null
+        string? mediaPath = request.QuizMedia is not null
                             ? await _file.UploadAsync<Quiz>(request.QuizMedia, FileType.QuizMedia, cancellationToken)
                             : null;
+
+        string? quizPath = mediaPath;
+        if (!string.IsNullOrEmpty(mediaPath))
+        {
+            quizPath = _file.UnZip(mediaPath);
+            _file.RemoveFile(mediaPath);
+        }
 
         entity.Update(
             request.Code,
@@ -64,7 +73,12 @@ public class UpdateQuizRequestHandler : IRequestHandler<UpdateQuizRequest, Guid>
             request.EndTime,
             request.IsActive,
             request.QuizType,
-            request.QuizTopic);
+            request.QuizTopic,
+            request.QuizMode,
+            request.Price,
+            request.Sale,
+            request.RatingCount,
+            request.Rating);
 
         await _repository.UpdateAsync(entity, cancellationToken);
 

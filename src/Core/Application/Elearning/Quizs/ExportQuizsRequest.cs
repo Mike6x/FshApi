@@ -7,6 +7,8 @@ public class ExportQuizsRequest : BaseFilter, IRequest<Stream>
 {
     public QuizType? QuizType { get; set; }
     public QuizTopic? QuizTopic { get; set; }
+    public bool? IsActive { get; set; }
+    public QuizMode? QuizMode { get; set; }
 }
 
 public class ExportQuizsRequestHandler : IRequestHandler<ExportQuizsRequest, Stream>
@@ -36,5 +38,7 @@ public class ExportQuizsSpecification : EntitiesByBaseFilterSpec<Quiz, QuizExpor
         : base(request) =>
         Query
             .Where(e => e.QuizType.Equals(request.QuizType!.HasValue), request.QuizType.HasValue)
-            .Where(e => e.QuizTopic.Equals(request.QuizType!.HasValue), request.QuizTopic.HasValue);
+            .Where(e => e.QuizTopic.Equals(request.QuizType!.HasValue), request.QuizTopic.HasValue)
+            .Where(e => e.IsActive.Equals(request.IsActive!), request.IsActive.HasValue)
+            .Where(e => e.QuizMode.Equals(request.QuizMode!.HasValue), request.QuizMode.HasValue);
 }

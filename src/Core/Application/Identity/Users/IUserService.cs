@@ -43,7 +43,9 @@ public interface IUserService : ITransientService
     Task ChangePasswordAsync(ChangePasswordRequest request, string userId);
 
     #region My Customize
-    Task<UserDetailsDto> GetByUserNameAsync(string userName, CancellationToken cancellationToken);
+    Task<UserDetailsDto> GetByNameAsync(string name, CancellationToken cancellationToken);
+    Task<UserDetailsDto> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<UserDetailsDto> GetByPhoneAsync(string phone, CancellationToken cancellationToken);
     Task SendVerificationEmailAsync(string userId, string origin, CancellationToken cancellationToken);
     Task<Stream> ExportAsync(UserListFilter filter, CancellationToken cancellationToken);
     Task<string> DeleteAsync(string userId, CancellationToken cancellationToken);

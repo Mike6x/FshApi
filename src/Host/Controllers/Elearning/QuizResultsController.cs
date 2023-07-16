@@ -1,10 +1,18 @@
 ﻿using FSH.WebApi.Application.Elearning.QuizResults;
-using Microsoft.AspNetCore.Cors;
+using FSH.WebApi.Application.Elearning.Quizs;
 
 namespace FSH.WebApi.Host.Controllers.Elearning;
 
 public class QuizResultsController : VersionedApiController
 {
+    [HttpPost("GetList")]
+    [MustHavePermission(FSHAction.View, FSHResource.QuizResults)]
+    [OpenApiOperation("Get QuizResults by User .", "")]
+    public async Task<List<QuizResultDto>> GetListAsync(GetQuizResultsRequest request)
+    {
+        return await Mediator.Send(request);
+    }
+
     [HttpPost("search")]
     [MustHavePermission(FSHAction.Search, FSHResource.QuizResults)]
     [OpenApiOperation("Search QuizResults using available filters.", "")]
@@ -22,10 +30,12 @@ public class QuizResultsController : VersionedApiController
     }
 
     [HttpPost("mobile-create")]
-    [TenantIdHeader]
     [AllowAnonymous]
-    [Consumes("application/x-www-form-urlencoded")]
+
+    // [TenantIdHeader]
+    // [Consumes("application/x-www-form-urlencoded")]
     [OpenApiOperation("Anonymous user creates a new QuizResult.", "")]
+    [ApiConventionMethod(typeof(FSHApiConventions), nameof(FSHApiConventions.Create))]
     public Task<Guid> MobileCreateAsync([FromForm] MobileCreateQuizResultRequest request)
     {
         return Mediator.Send(request);
@@ -64,5 +74,13 @@ public class QuizResultsController : VersionedApiController
     {
         var result = await Mediator.Send(filter);
         return File(result, "application/octet-stream", "QuizResultExports");
+    }
+
+    [HttpPost("import")]
+    [MustHavePermission(FSHAction.Import, FSHResource.QuizResults)]
+    [OpenApiOperation("Import a QuizResults.", "")]
+    public async Task<ActionResult<int>> ImportAsync(ImportQuizResultsRequest request)
+    {
+        return Ok(await Mediator.Send(request));
     }
 }

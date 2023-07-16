@@ -14,6 +14,11 @@ public class QuizDto : IDto
     public bool IsActive { get; set; }
     public QuizType QuizType { get; set; }
     public QuizTopic QuizTopic { get; set; }
+    public QuizMode QuizMode { get; set; }
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }
 
 public class QuizDetailsDto : IDto
@@ -29,6 +34,11 @@ public class QuizDetailsDto : IDto
     public bool IsActive { get; set; }
     public QuizType QuizType { get; set; }
     public QuizTopic QuizTopic { get; set; }
+    public QuizMode QuizMode { get; set; }
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }
 
 public class QuizExportDto : IDto
@@ -44,4 +54,9 @@ public class QuizExportDto : IDto
     public bool IsActive { get; set; }
     public QuizType QuizType { get; set; }
     public QuizTopic QuizTopic { get; set; }
+    public QuizMode QuizMode { get; set; }
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }

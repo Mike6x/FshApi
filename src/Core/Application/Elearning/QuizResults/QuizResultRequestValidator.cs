@@ -58,4 +58,3 @@ public class UpdateQuizResultRequestValidator : CustomValidator<UpdateQuizResult
                 .WithMessage((_, id) => T["Quiz {0} Not Found.", id]);
     }
 }
-

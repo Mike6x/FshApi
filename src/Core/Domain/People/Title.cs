@@ -1,6 +1,4 @@
-﻿using FSH.WebApi.Domain.Sales;
-
-namespace FSH.WebApi.Domain.People;
+﻿namespace FSH.WebApi.Domain.People;
 
 public class Title : AuditableEntity, IAggregateRoot
 {

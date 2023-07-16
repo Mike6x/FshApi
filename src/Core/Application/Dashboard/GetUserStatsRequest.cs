@@ -27,12 +27,16 @@ public class GetUserStatsRequestHandler : IRequestHandler<GetUserStatsRequest, U
 
     public async Task<UserStatsDto> Handle(GetUserStatsRequest request, CancellationToken cancellationToken)
     {
+        var users = await _userService.GetListAsync(cancellationToken);
+        var onlineUsers = users.Where(x => x.IsLive).ToList();
+
         var stats = new UserStatsDto
         {
             ProductCount = await _productRepo.CountAsync(cancellationToken),
             BrandCount = await _brandRepo.CountAsync(cancellationToken),
             UserCount = await _userService.GetCountAsync(cancellationToken),
-            RoleCount = await _roleService.GetCountAsync(cancellationToken)
+            RoleCount = await _roleService.GetCountAsync(cancellationToken),
+            UserOnlineCount = onlineUsers.Count
         };
 
         int selectedYear = DateTime.UtcNow.Year;

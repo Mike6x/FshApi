@@ -21,12 +21,20 @@ internal static class Startup
         if (corsSettings.React is not null)
             origins.AddRange(corsSettings.React.Split(';', StringSplitOptions.RemoveEmptyEntries));
 
+        // Remove Core for Flutter Client
+
         return services.AddCors(opt =>
-            opt.AddPolicy(CorsPolicy, policy =>
-                policy.AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-                    .WithOrigins(origins.ToArray())));
+          opt.AddPolicy(CorsPolicy, policy =>
+              policy.AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowAnyOrigin()));
+
+        // return services.AddCors(opt =>
+        // opt.AddPolicy(CorsPolicy, policy =>
+        //   policy.AllowAnyHeader()
+        //       .AllowAnyMethod()
+        //       .AllowCredentials()
+        //       .WithOrigins(origins.ToArray())));
     }
 
     internal static IApplicationBuilder UseCorsPolicy(this IApplicationBuilder app) =>

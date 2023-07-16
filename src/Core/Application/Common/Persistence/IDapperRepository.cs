@@ -63,8 +63,16 @@ public interface IDapperRepository : ITransientService
     /// </summary>
     Task UpdateRangeAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         where T : class, IAggregateRoot;
+
+    /// <summary>
+    /// This method used for Delete Range Entities.
+    /// </summary>
     Task DeleteRangeAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-    where T : class, IEntity;
+    where T : class, IAggregateRoot;
+
+    /// <summary>
+    /// This method used for Add Range Entities.
+    /// </summary>
     Task<IEnumerable<T>> AddRangeAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-    where T : class, IEntity;
+    where T : class, IAggregateRoot;
 }

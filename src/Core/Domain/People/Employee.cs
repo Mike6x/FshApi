@@ -148,7 +148,7 @@ public class Employee : AuditableEntity, IAggregateRoot
 
         if (titleId.HasValue && titleId.Value != DefaultIdType.Empty && !TitleId.Equals(titleId.Value)) TitleId = titleId.Value;
 
-        if (superiorId.HasValue && superiorId.Value == DefaultIdType.Empty)
+        if (superiorId == DefaultIdType.Empty)
         {
             SuperiorId = null;
         }

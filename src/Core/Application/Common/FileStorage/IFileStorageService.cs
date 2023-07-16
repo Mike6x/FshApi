@@ -6,4 +6,9 @@ public interface IFileStorageService : ITransientService
     where T : class;
 
     public void Remove(string? path);
+
+    public string? UnZip(string relativePath);
+
+    public void RemoveFolder(string relativePath);
+    public void RemoveFile(string relativePath);
 }

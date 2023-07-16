@@ -1,9 +1,3 @@
-using System.Drawing;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Mail;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using FSH.WebApi.Application.Common.Exceptions;
 using FSH.WebApi.Application.Identity.Tokens;
 using FSH.WebApi.Infrastructure.Auth;
@@ -15,6 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FSH.WebApi.Infrastructure.Identity;
 
@@ -104,7 +103,7 @@ internal class TokenService : ITokenService
             throw new UnauthorizedException(_t["E-Mail not yet confirmed."]);
         }
 
-        var signInResult = await _signInManager.PasswordSignInAsync(user?.UserName, request.Password, true, true);
+        var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
 
         if (signInResult.IsLockedOut)
         {
@@ -151,9 +150,9 @@ internal class TokenService : ITokenService
     private async Task<TokenResponse> GenerateTokensAndUpdateUser(ApplicationUser user, string ipAddress)
     {
         string token = GenerateJwt(user, ipAddress);
-
         user.RefreshToken = GenerateRefreshToken();
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
+        user.IsLive = true;
 
         await _userManager.UpdateAsync(user);
 
@@ -238,4 +237,20 @@ internal class TokenService : ITokenService
             return false;
         }
     }
+
+    #region My Customize
+    public async Task<bool> RevokeTokenAsync(string userId, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException("Application user not found.");
+
+        // user.RefreshTokenExpiryTime = DateTime.UtcNow;
+        user.IsLive = false;
+
+        var result = await _userManager.UpdateAsync(user);
+
+        return result.Succeeded;
+
+        // await _signInManager.SignOutAsync();
+    }
+    #endregion
 }

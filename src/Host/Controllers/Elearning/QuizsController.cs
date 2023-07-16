@@ -54,4 +54,12 @@ public class QuizsController : VersionedApiController
         var result = await Mediator.Send(filter);
         return File(result, "application/octet-stream", "QuizExports");
     }
+
+    [HttpPost("import")]
+    [MustHavePermission(FSHAction.Import, FSHResource.Quizs)]
+    [OpenApiOperation("Import a Quizs Info.", "")]
+    public async Task<ActionResult<int>> ImportAsync(ImportQuizsRequest request)
+    {
+        return Ok(await Mediator.Send(request));
+    }
 }

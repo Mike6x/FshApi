@@ -6,6 +6,8 @@ public class SearchQuizsRequest : PaginationFilter, IRequest<PaginationResponse<
 {
     public QuizType? QuizType { get; set; }
     public QuizTopic? QuizTopic { get; set; }
+    public QuizMode? QuizMode { get; set; }
+    public bool? IsActive { get; set; }
 }
 
 public class SearchQuizsRequestHandler : IRequestHandler<SearchQuizsRequest, PaginationResponse<QuizDto>>
@@ -17,6 +19,7 @@ public class SearchQuizsRequestHandler : IRequestHandler<SearchQuizsRequest, Pag
     public async Task<PaginationResponse<QuizDto>> Handle(SearchQuizsRequest request, CancellationToken cancellationToken)
     {
         var spec = new SearchQuizsRequestSpecification(request);
+
         return await _repository.PaginatedListAsync(spec, request.PageNumber, request.PageSize, cancellationToken);
     }
 }
@@ -26,7 +29,9 @@ public class SearchQuizsRequestSpecification : EntitiesByPaginationFilterSpec<Qu
     public SearchQuizsRequestSpecification(SearchQuizsRequest request)
         : base(request) =>
             Query
-                .Where(e => e.QuizType.Equals(request.QuizType!.HasValue), request.QuizType.HasValue)
-                .Where(e => e.QuizTopic.Equals(request.QuizType!.HasValue), request.QuizTopic.HasValue)
-                .OrderBy(e => e.Code, !request.HasOrderBy());
+                .OrderByDescending(e => e.CreatedOn, !request.HasOrderBy())
+                    .Where(e => e.QuizType.Equals(request.QuizType!), request.QuizType.HasValue)
+                    .Where(e => e.QuizTopic.Equals(request.QuizTopic!), request.QuizTopic.HasValue)
+                    .Where(e => e.IsActive.Equals(request.IsActive!), request.IsActive.HasValue)
+                    .Where(e => e.QuizMode.Equals(request.QuizMode!), request.QuizMode.HasValue);
 }

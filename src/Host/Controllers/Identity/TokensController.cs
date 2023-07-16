@@ -5,9 +5,7 @@ namespace FSH.WebApi.Host.Controllers.Identity;
 public sealed class TokensController : VersionNeutralApiController
 {
     private readonly ITokenService _tokenService;
-
     public TokensController(ITokenService tokenService) => _tokenService = tokenService;
-
     [HttpPost]
     [AllowAnonymous]
     [TenantIdHeader]
@@ -31,4 +29,8 @@ public sealed class TokensController : VersionNeutralApiController
         Request.Headers.ContainsKey("X-Forwarded-For")
             ? Request.Headers["X-Forwarded-For"]
             : HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "N/A";
+
+    #region My Customize
+
+    #endregion
 }
