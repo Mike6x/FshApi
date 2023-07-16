@@ -1,8 +1,9 @@
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using FSH.WebApi.Application.Common.FileStorage;
 using FSH.WebApi.Domain.Common;
 using FSH.WebApi.Infrastructure.Common.Extensions;
+using System.IO.Compression;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace FSH.WebApi.Infrastructure.FileStorage;
 
@@ -21,9 +22,12 @@ public class LocalFileStorageService : IFileStorageService
         if (request.Name is null)
             throw new InvalidOperationException("Name is required.");
 
-        string base64Data = Regex.Match(request.Data, "data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+        string base64Data = Regex.Match(request.Data, string.Format("data:{0}/(?<type>.+?),(?<data>.+)", supportedFileType.ToString().ToLower())).Groups["data"].Value;
+
+        // string base64Data = Regex.Match(request.Data, "data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
 
         var streamData = new MemoryStream(Convert.FromBase64String(base64Data));
+
         if (streamData.Length > 0)
         {
             string folder = typeof(T).Name;
@@ -35,6 +39,8 @@ public class LocalFileStorageService : IFileStorageService
             string folderName = supportedFileType switch
             {
                 FileType.Image => Path.Combine("Files", "Images", folder),
+                FileType.QuizMedia => Path.Combine("Files", "Quizs", folder),
+                FileType.Doccument => Path.Combine("Files", "Docs", folder),
                 _ => Path.Combine("Files", "Others", folder),
             };
             string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -123,5 +129,37 @@ public class LocalFileStorageService : IFileStorageService
         }
 
         return string.Format(pattern, max);
+    }
+
+    public string? UnZip(string relativePath)
+    {
+        string fullZipPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+        if (!File.Exists(fullZipPath)) return null;
+
+        string relativeExtractPath = Regex.Replace(relativePath, ".zip", string.Empty);
+
+        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativeExtractPath);
+
+        RemoveFolder(relativeExtractPath);
+
+        ZipFile.ExtractToDirectory(fullZipPath, fullPath, true);
+        return relativeExtractPath;
+    }
+
+    public void RemoveFolder(string relativePath)
+    {
+        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+        if (Directory.Exists(fullPath))
+            Directory.Delete(fullPath, true);
+    }
+
+    public void RemoveFile(string relativePath)
+    {
+        string fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
     }
 }

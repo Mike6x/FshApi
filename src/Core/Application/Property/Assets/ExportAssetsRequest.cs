@@ -1,12 +1,14 @@
 ﻿using FSH.WebApi.Application.Common.DataIO;
 using FSH.WebApi.Domain.Property;
-using MediatR;
 
 namespace FSH.WebApi.Application.Property.Assets;
 
 public class ExportAssetsRequest : BaseFilter, IRequest<Stream>
 {
     public DefaultIdType? CategorieId { get; set; }
+    public DefaultIdType? SubCategorieId { get; set; }
+    public DefaultIdType? QualityStatusId { get; set; }
+    public DefaultIdType? UsingStatusId { get; set; }
 }
 
 public class ExportAssetsRequestHandler : IRequestHandler<ExportAssetsRequest, Stream>
@@ -36,6 +38,9 @@ public class ExportAssetsSpec : EntitiesByBaseFilterSpec<Asset, AssetExportDto>
         : base(request) =>
             Query
                 .Include(e => e.Categorie)
-                .Where(e => e.CategorieId.Equals(request.CategorieId!.Value), request.CategorieId.HasValue)
-                .OrderBy(e => e.Name);
+                    .Where(e => e.CategorieId.Equals(request.CategorieId!.Value), request.CategorieId.HasValue)
+                    .Where(e => e.SubCategorieId.Equals(request.SubCategorieId!.Value), request.SubCategorieId.HasValue)
+                    .Where(e => e.QualityStatusId.Equals(request.QualityStatusId!.Value), request.QualityStatusId.HasValue)
+                    .Where(e => e.UsingStatusId.Equals(request.UsingStatusId!.Value), request.UsingStatusId.HasValue)
+                        .OrderBy(e => e.Name);
 }

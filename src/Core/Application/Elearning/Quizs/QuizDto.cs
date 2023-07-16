@@ -12,8 +12,18 @@ public class QuizDto : IDto
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public bool IsActive { get; set; }
-    public QuizType QuizType { get; set; }
-    public QuizTopic QuizTopic { get; set; }
+
+    public DefaultIdType QuizTypeId { get; set; }
+    public string QuizTypeName { get; set; } = default!;
+    public DefaultIdType QuizTopicId { get; set; }
+    public string QuizTopicName { get; set; } = default!;
+    public DefaultIdType QuizModeId { get; set; }
+    public string QuizModeName { get; set; } = default!;
+
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }
 
 public class QuizDetailsDto : IDto
@@ -27,8 +37,18 @@ public class QuizDetailsDto : IDto
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public bool IsActive { get; set; }
-    public QuizType QuizType { get; set; }
-    public QuizTopic QuizTopic { get; set; }
+
+    public DefaultIdType QuizTypeId { get; set; }
+    public string QuizTypeName { get; set; } = default!;
+    public DefaultIdType QuizTopicId { get; set; }
+    public string QuizTopicName { get; set; } = default!;
+    public DefaultIdType QuizModeId { get; set; }
+    public string QuizModeName { get; set; } = default!;
+
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }
 
 public class QuizExportDto : IDto
@@ -42,6 +62,16 @@ public class QuizExportDto : IDto
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public bool IsActive { get; set; }
-    public QuizType QuizType { get; set; }
-    public QuizTopic QuizTopic { get; set; }
+
+    public DefaultIdType QuizTypeId { get; set; }
+    public string QuizTypeName { get; set; } = default!;
+    public DefaultIdType QuizTopicId { get; set; }
+    public string QuizTopicName { get; set; } = default!;
+    public DefaultIdType QuizModeId { get; set; }
+    public string QuizModeName { get; set; } = default!;
+
+    public decimal? Price { get; set; }
+    public int? Sale { get; set; }
+    public decimal? Rating { get; set; }
+    public int? RatingCount { get; set; }
 }

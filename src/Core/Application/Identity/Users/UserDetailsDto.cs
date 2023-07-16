@@ -14,6 +14,7 @@ public class UserDetailsDto
 
     public bool IsActive { get; set; } = true;
 
+    public bool IsLive { get; set; }
     public bool EmailConfirmed { get; set; }
 
     public string? PhoneNumber { get; set; }

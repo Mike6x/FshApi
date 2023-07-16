@@ -1,0 +1,46 @@
+[
+  {
+    "Id": "F686BCDB-730B-4F09-7E2A-08DC70C21DCF",
+    "Order": 1,
+    "Code": "BackgroundJob",
+    "Name": "BackgroundJob",
+    "Description": "Master Data",
+    "Seperator": "_",
+    "Value": 3,
+    "Type": 1,
+    "IsActive": true
+  },
+  {
+    "Id": "B0AAFF45-9F7F-4D48-7E2B-08DC70C21DCF",
+    "Order": 4,
+    "Code": "ChatMessage",
+    "Name": "ChatMessage",
+    "Description": "Integer Code",
+    "Seperator": "_",
+    "Value": 4,
+    "Type": 2,
+    "IsActive": true
+  },
+  {
+    "Id": "5C2D5515-4EF6-4E5D-7E2C-08DC70C21DCF",
+    "Order": 3,
+    "Code": "Dimensions",
+    "Name": "Dimensions",
+    "Description": "Fast Transaction",
+    "Seperator": "_",
+    "Value": 3,
+    "Type": 3,
+    "IsActive": true
+  },
+  {
+    "Id": "3990764A-B032-4CD4-7E2D-08DC70C21DCF",
+    "Order": 2,
+    "Code": "Menus",
+    "Name": "Menus",
+    "Description": "Transaction",
+    "Seperator": "_",
+    "Value": 3,
+    "Type": 2,
+    "IsActive": true
+  }
+]

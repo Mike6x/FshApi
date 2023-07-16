@@ -4,14 +4,14 @@ namespace FSH.WebApi.Application.Settings.Menus;
 
 public class UpdateMenuRequest : IRequest<Guid>
 {
-    public Guid Id { get; set; }
+    public DefaultIdType Id { get; set; }
     public int Order { get; set; }
-    public string Code { get; set; } = default!;
-    public string Name { get; set; } = default!;
+    public string? Code { get; set; }
+    public string? Name { get; set; }
     public string? Description { get; set; }
     public bool? IsActive { get; set; }
 
-    public string Href { get; set; } = string.Empty;
+    public string Href { get; set; } = default!;
     public string? Icon { get; set; }
     public int Parent { get; set; }
 }
@@ -37,7 +37,7 @@ public class UpdateMenuRequestHandler : IRequestHandler<UpdateMenuRequest, Guid>
             request.Code,
             request.Name,
             request.Description,
-            request.IsActive ?? true,
+            request.IsActive,
             request.Href,
             request.Icon,
             request.Parent);

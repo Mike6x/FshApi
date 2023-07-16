@@ -1,11 +1,9 @@
 ﻿using FSH.WebApi.Domain.Settings;
 
 namespace FSH.WebApi.Application.Settings.Menus;
-public class DeleteMenuRequest : IRequest<Guid>
+public class DeleteMenuRequest(Guid id) : IRequest<Guid>
 {
-    public Guid Id { get; set; }
-
-    public DeleteMenuRequest(Guid id) => Id = id;
+    public Guid Id { get; set; } = id;
 }
 
 public class DeleteMenuRequestHandler : IRequestHandler<DeleteMenuRequest, Guid>
@@ -28,4 +26,3 @@ public class DeleteMenuRequestHandler : IRequestHandler<DeleteMenuRequest, Guid>
         return request.Id;
     }
 }
-

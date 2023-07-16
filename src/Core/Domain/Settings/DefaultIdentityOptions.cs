@@ -3,7 +3,7 @@
     public class DefaultIdentityOptions : AuditableEntity, IAggregateRoot
     {
         // password settings
-       // public int Id { get; set; }
+        // public int Id { get; set; }
         public bool PasswordRequireDigit { get; set; }
         public int PasswordRequiredLength { get; set; }
         public bool PasswordRequireNonAlphanumeric { get; set; }
@@ -29,4 +29,3 @@
         public string? AccessDeniedPath { get; set; }
         public bool SlidingExpiration { get; set; }
     }
-

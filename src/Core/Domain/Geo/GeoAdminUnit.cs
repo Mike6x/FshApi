@@ -1,37 +1,21 @@
 ﻿namespace FSH.WebApi.Domain.Geo;
-public class GeoAdminUnit : AuditableEntity, IAggregateRoot
+public class GeoAdminUnit(string code, string name, string? fullName, string? navetiveName, string? fullNavetiveName, string? description, int grade, GeoAdminUnitType type, int order, bool isActive) : AuditableEntity, IAggregateRoot
 {
-    public int Order { get; private set; }
-    public string Code { get; private set; } = default!;
-    public string Name { get; private set; } = default!;
-    public string? Description { get; private set; }
-    public bool IsActive { get; set; }
+    public int Order { get; private set; } = order;
+    public string Code { get; private set; } = code;
+    public string Name { get; private set; } = name;
+    public string? Description { get; private set; } = description ?? string.Empty;
+    public bool IsActive { get; set; } = isActive;
 
-    public string? FullName { get; private set; }
-    public string? NativeName { get; private set; }
-    public string? FullNativeName { get; private set; }
+    public string? FullName { get; private set; } = fullName;
+    public string? NativeName { get; private set; } = navetiveName;
+    public string? FullNativeName { get; private set; } = fullNavetiveName;
 
-    public int Grade { get; private set; }
-    public GeoAdminUnitType Type { get; private set; }
-
-    public GeoAdminUnit(string code, string name, string? fullName, string? navetiveName, string? fullNavetiveName, string? description, int grade, GeoAdminUnitType type, int order, bool isActive)
-    {
-        Order = order;
-        Code = code;
-        Name = name;
-        Description = description ?? string.Empty;
-        IsActive = isActive;
-
-        FullName = fullName;
-        NativeName = navetiveName;
-        FullNativeName = fullNavetiveName;
-
-        Grade = grade;
-        Type = type;
-    }
+    public int Grade { get; private set; } = grade;
+    public GeoAdminUnitType Type { get; private set; } = type;
 
     public GeoAdminUnit()
-    : this(string.Empty, string.Empty, null, null, null, null, 0, GeoAdminUnitType.Ward, 0, true)
+        : this(string.Empty, string.Empty, null, null, null, null, 0, GeoAdminUnitType.Ward, 0, true)
     {
     }
 

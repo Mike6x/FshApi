@@ -8,20 +8,14 @@ public class ImportMenusRequest : IRequest<int>
     public FileUploadRequest ExcelFile { get; set; } = default!;
 }
 
-public class ImportMenusRequestHandler : IRequestHandler<ImportMenusRequest, int>
+public class ImportMenusRequestHandler(
+    IDapperRepository repository,
+    IExcelReader excelReader,
+    IStringLocalizer<ImportMenusRequestHandler> localizer) : IRequestHandler<ImportMenusRequest, int>
 {
-    private readonly IDapperRepository _repository;
-    private readonly IExcelReader _excelReader;
-    private readonly IStringLocalizer _localizer;
-    public ImportMenusRequestHandler(
-        IDapperRepository repository,
-        IExcelReader excelReader,
-        IStringLocalizer<ImportMenusRequestHandler> localizer)
-    {
-        _repository = repository;
-        _excelReader = excelReader;
-        _localizer = localizer;
-    }
+    private readonly IDapperRepository _repository = repository;
+    private readonly IExcelReader _excelReader = excelReader;
+    private readonly IStringLocalizer _localizer = localizer;
 
     public async Task<int> Handle(ImportMenusRequest request, CancellationToken cancellationToken)
     {

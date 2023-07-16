@@ -23,7 +23,7 @@ public class EmployeeDto : IDto
     public Guid TitleId { get; set; }
     public string TitleCode { get; set; } = default!;
     public string TitleName { get; set; } = default!;
-    public int TitleGrade { get; set; } = default!;
+    public int TitleValue { get; set; } = default!;
 
     public Guid? SuperiorId { get; set; }
     public string? SuperiorFirstName { get; set; }
@@ -54,7 +54,7 @@ public class EmployeeExportDto : IDto
 
     public string Code { get; set; } = default!;
     public string FirstName { get; set; } = default!;
-    public string? LastName { get; set; } = default!;
+    public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
     public string? Address { get; set; }
@@ -70,6 +70,8 @@ public class EmployeeExportDto : IDto
 
     public Guid TitleId { get; set; }
     public string TitleName { get; set; } = default!;
+    public int TitleValue { get; set; } = default!;
+
     public Guid? SuperiorId { get; set; }
     public string? SuperiorFirstName { get; set; }
     public string? SuperiorLastName { get; set; }

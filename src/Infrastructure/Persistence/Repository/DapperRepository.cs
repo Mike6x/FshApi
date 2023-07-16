@@ -150,8 +150,9 @@ public class DapperRepository : IDapperRepository
     }
 
     public async Task<IEnumerable<T>> AddRangeAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-    where T : class, IEntity
+    where T : class, IAggregateRoot
     {
+        _dbContext.TenantNotSetMode = TenantNotSetMode.Overwrite;
         _dbContext.Set<T>().AddRange(entities);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -160,8 +161,11 @@ public class DapperRepository : IDapperRepository
     }
 
     public async Task DeleteRangeAsync<T>(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-    where T : class, IEntity
+    where T : class, IAggregateRoot
+
+    // where T : class, IEntity
     {
+        _dbContext.TenantNotSetMode = TenantNotSetMode.Overwrite;
         _dbContext.Set<T>().RemoveRange(entities);
 
         await _dbContext.SaveChangesAsync(cancellationToken);

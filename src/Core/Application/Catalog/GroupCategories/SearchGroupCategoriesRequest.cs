@@ -25,7 +25,7 @@ public class SearchGroupCategoriesSpecification : EntitiesByPaginationFilterSpec
         : base(request) =>
             Query
                 .Include(e => e.BusinessLine)
-                .OrderBy(e => e.Order, !request.HasOrderBy())
-                .Where(e => e.BusinessLineId.Equals(request.BusinessLineId!.Value), request.BusinessLineId.HasValue)
-                .Where(e => e.Type.Equals(request.Type!.Value) || e.Type.Equals(CatalogType.General), request.Type.HasValue);
+                    .Where(e => e.BusinessLineId.Equals(request.BusinessLineId!.Value), request.BusinessLineId.HasValue)
+                    .Where(e => e.Type.Equals(request.Type!.Value), request.Type.HasValue)
+                        .OrderBy(e => e.Order, !request.HasOrderBy());
 }

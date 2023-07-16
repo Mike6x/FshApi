@@ -4,7 +4,8 @@ namespace FSH.WebApi.Application.Catalog.GroupCategories;
 
 public class ExportGroupCategoriesRequest : BaseFilter, IRequest<Stream>
 {
-    public Guid? BusinessLineId { get; set; }
+    public DefaultIdType? BusinessLineId { get; set; }
+    public CatalogType? Type { get; set; }
 }
 
 public class ExportGroupCategoriesRequestHandler : IRequestHandler<ExportGroupCategoriesRequest, Stream>
@@ -34,5 +35,7 @@ public class ExportGroupCategoriesSpecification : EntitiesByBaseFilterSpec<Group
         : base(request) =>
         Query
             .Include(e => e.BusinessLine)
-            .Where(e => e.BusinessLineId.Equals(request.BusinessLineId!.Value), request.BusinessLineId.HasValue);
+                .Where(e => e.BusinessLineId.Equals(request.BusinessLineId!.Value), request.BusinessLineId.HasValue)
+                .Where(e => e.Type.Equals(request.Type!.Value), request.Type.HasValue)
+                    .OrderBy(e => e.Order);
 }

@@ -1,7 +1,7 @@
 ﻿namespace FSH.WebApi.Application.Settings.Menus;
 public class MenuDto : IDto
 {
-    public Guid Id { get; set; }
+    public DefaultIdType Id { get; set; }
     public int Order { get; set; }
     public string Code { get; set; } = default!;
     public string Name { get; set; } = default!;
@@ -15,14 +15,14 @@ public class MenuDto : IDto
 
 public class MenuDetailsDto : IDto
 {
-    public Guid Id { get; set; }
+    public DefaultIdType Id { get; set; }
     public int Code { get; set; }
     public string Name { get; set; } = string.Empty;
 }
 
 public class MenuExportDto : IDto
 {
-    public Guid Id { get; set; }
+    public DefaultIdType Id { get; set; }
     public int Order { get; set; }
     public string Code { get; set; } = default!;
     public string Name { get; set; } = default!;
@@ -33,4 +33,3 @@ public class MenuExportDto : IDto
     public string? Icon { get; set; }
     public int Parent { get; set; }
 }
-

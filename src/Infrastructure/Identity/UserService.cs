@@ -2,6 +2,7 @@ using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 using Finbuckle.MultiTenant;
 using FSH.WebApi.Application.Common.Caching;
+using FSH.WebApi.Application.Common.DataIO;
 using FSH.WebApi.Application.Common.Events;
 using FSH.WebApi.Application.Common.Exceptions;
 using FSH.WebApi.Application.Common.FileStorage;
@@ -10,7 +11,6 @@ using FSH.WebApi.Application.Common.Mailing;
 using FSH.WebApi.Application.Common.Models;
 using FSH.WebApi.Application.Common.Specification;
 using FSH.WebApi.Application.Identity.Users;
-using FSH.WebApi.Domain.Common;
 using FSH.WebApi.Domain.Identity;
 using FSH.WebApi.Infrastructure.Auth;
 using FSH.WebApi.Infrastructure.Persistence.Context;
@@ -20,7 +20,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using FSH.WebApi.Application.Common.DataIO;
 
 namespace FSH.WebApi.Infrastructure.Identity;
 

@@ -2,8 +2,12 @@ using Finbuckle.MultiTenant;
 using FSH.WebApi.Application.Common.Events;
 using FSH.WebApi.Application.Common.Interfaces;
 using FSH.WebApi.Domain.Catalog;
+using FSH.WebApi.Domain.Communication;
 using FSH.WebApi.Domain.Elearning;
+using FSH.WebApi.Domain.Game;
 using FSH.WebApi.Domain.Geo;
+using FSH.WebApi.Domain.Integration;
+using FSH.WebApi.Domain.Leave;
 using FSH.WebApi.Domain.Organization;
 using FSH.WebApi.Domain.People;
 using FSH.WebApi.Domain.Place;
@@ -12,7 +16,6 @@ using FSH.WebApi.Domain.Production;
 using FSH.WebApi.Domain.Property;
 using FSH.WebApi.Domain.Purchase;
 using FSH.WebApi.Domain.Settings;
-using FSH.WebApi.Infrastructure.Chat;
 using FSH.WebApi.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -28,7 +31,14 @@ public class ApplicationDbContext : BaseDbContext
 
     #region Settings DbContext
     public DbSet<Menu> Menus => Set<Menu>();
+    public DbSet<Dimension> Dimensions => Set<Dimension>();
+    public DbSet<BackgroundJob> BackgroundJobs => Set<BackgroundJob>();
+    public DbSet<CronJob> CronJobs => Set<CronJob>();
+    public DbSet<EntityCode> EntityCodes => Set<EntityCode>();
+    #endregion
 
+    #region Integrations
+    public DbSet<ApiSerial> ApiSerials => Set<ApiSerial>();
     #endregion
 
     #region Geo DbContext
@@ -52,7 +62,6 @@ public class ApplicationDbContext : BaseDbContext
 
     #region Property DbContext
     public DbSet<Asset> Assets => Set<Asset>();
-    public DbSet<AssetStatus> AssetStatuses => Set<AssetStatus>();
     public DbSet<AssetHistory> AssetHistorys => Set<AssetHistory>();
     #endregion
 
@@ -90,8 +99,11 @@ public class ApplicationDbContext : BaseDbContext
 
     #region People DbContext
     public DbSet<Employee> Employees => Set<Employee>();
-    public DbSet<Title> Titles => Set<Title>();
+    #endregion
 
+    #region TimeOff DbContext
+    public DbSet<LeaveAllocation> LeaveAllocations => Set<LeaveAllocation>();
+    public DbSet<LeaveApplication> LeaveApplications => Set<LeaveApplication>();
     #endregion
 
     #region Purchase DbContext
@@ -101,6 +113,13 @@ public class ApplicationDbContext : BaseDbContext
 
     #region Chat DbContext
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+
+    #endregion
+
+    #region Game DbContext
+    public DbSet<VnPower> VnPowers => Set<VnPower>();
+    public DbSet<VnPowerResult> VnPowerResults => Set<VnPowerResult>();
+    public DbSet<VnPowerForcast> VnPowerForcasts => Set<VnPowerForcast>();
 
     #endregion
     protected override void OnModelCreating(ModelBuilder modelBuilder)

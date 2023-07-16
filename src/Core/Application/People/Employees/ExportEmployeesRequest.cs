@@ -5,7 +5,10 @@ namespace FSH.WebApi.Application.People.Employees;
 
 public class ExportEmployeesRequest : BaseFilter, IRequest<Stream>
 {
+    public Gender? Gender { get; set; }
+    public DefaultIdType? BusinessUnitId { get; set; }
     public DefaultIdType? DepartmentId { get; set; }
+    public DefaultIdType? SubDepartmentId { get; set; }
     public DefaultIdType? TeamId { get; set; }
 }
 

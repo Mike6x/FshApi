@@ -1,17 +1,10 @@
 ﻿using FSH.WebApi.Domain.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSH.WebApi.Application.Settings.Menus;
 
-public class GetMenuRequest : IRequest<MenuDto>
+public class GetMenuRequest(Guid id) : IRequest<MenuDto>
 {
-    public Guid Id { get; set; }
-
-    public GetMenuRequest(Guid id) => Id = id;
+    public Guid Id { get; set; } = id;
 }
 
 public class MenuByIdSpec : Specification<Menu, MenuDto>, ISingleResultSpecification<Menu>
@@ -33,4 +26,3 @@ public class GetMenuRequestHandler : IRequestHandler<GetMenuRequest, MenuDto>
             (ISpecification<Menu, MenuDto>)new MenuByIdSpec(request.Id), cancellationToken)
         ?? throw new NotFoundException(_t["Entity {0} Not Found.", request.Id]);
 }
-

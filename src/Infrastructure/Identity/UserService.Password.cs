@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-using FSH.WebApi.Application.Common.Exceptions;
+﻿using FSH.WebApi.Application.Common.Exceptions;
 using FSH.WebApi.Application.Common.Mailing;
 using FSH.WebApi.Application.Identity.Users.Password;
 using Microsoft.AspNetCore.WebUtilities;
@@ -45,8 +44,6 @@ internal partial class UserService
 
     public async Task<string> ResetPasswordAsync(ResetPasswordRequest request)
     {
-        EnsureValidTenant(); // from 6.0
-
         // var user = await _userManager.FindByEmailAsync(request.Email?.Normalize()!);
         var user = await _userManager.FindByEmailAsync(request.Email.Normalize());
 

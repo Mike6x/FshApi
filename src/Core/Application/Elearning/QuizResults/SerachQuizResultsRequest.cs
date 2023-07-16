@@ -27,5 +27,5 @@ public class SearchQuizResultsRequestSpecification : EntitiesByPaginationFilterS
         Query
             .Include(e => e.Quiz)
             .Where(e => e.QuizId.Equals(request.QuizId!.Value), request.QuizId.HasValue)
-            .OrderBy(e => e.QuizId, !request.HasOrderBy());
+            .OrderByDescending(e => e.EndTime, !request.HasOrderBy());
 }

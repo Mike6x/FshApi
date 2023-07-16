@@ -51,3 +51,10 @@ public class EmployeeByPhoneNumberSpec : Specification<Employee>, ISingleResultS
         Query
             .Where(e => e.PhoneNumber == phone);
 }
+
+public class EmployeeByUserIdSpec : Specification<Employee>, ISingleResultSpecification<Employee>
+{
+    public EmployeeByUserIdSpec(string userId) =>
+        Query
+            .Where(e => e.UserId == userId);
+}

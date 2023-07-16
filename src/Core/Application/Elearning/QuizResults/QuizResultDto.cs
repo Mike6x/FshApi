@@ -8,6 +8,7 @@ public class QuizResultDto : IDto
     public DateTime EndTime { get; set; }
 
     // Student Point, Used time, Time spent on taking the quiz
+    public string? SId { get; set; }
     public decimal Sp { get; set; }
     public decimal Ut { get; set; }
     public string Fut { get; set; } = default!;
@@ -25,6 +26,10 @@ public class QuizResultDto : IDto
 
     public Guid QuizId { get; set; }
     public string QuizName { get; set; } = default!;
+    public string QuizCode { get; set; } = default!;
+
+    public decimal Rating { get; set; }
+    public bool IsPass { get; set; }
 }
 
 public class QuizResultDetailsDto : IDto
@@ -34,6 +39,7 @@ public class QuizResultDetailsDto : IDto
     public DateTime EndTime { get; set; }
 
     // Student Point, time, Time spent on taking the quiz
+    public string? SId { get; set; }
     public decimal Sp { get; set; }
     public decimal Ut { get; set; }
     public string Fut { get; set; } = default!;
@@ -48,6 +54,8 @@ public class QuizResultDetailsDto : IDto
     // Quiz version, type : Graded
     public string V { get; set; } = default!;
     public string T { get; set; } = default!;
+    public decimal Rating { get; set; }
+    public bool IsPass { get; set; }
 
     // Quiz Info
     public QuizDto Quiz { get; set; } = default!;
@@ -74,9 +82,21 @@ public class QuizResultExportDto : IDto
     public string T { get; set; } = default!;
 
     public string QuizName { get; set; } = default!;
+    public string QuizCode { get; set; } = default!;
+
+    public decimal Rating { get; set; }
+
+    public bool IsPass { get; set; }
 
     public Guid CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }
     public Guid LastModifiedBy { get; set; }
     public DateTime? LastModifiedOn { get; set; }
 }
+
+// public class QuizRatingDto : IDto
+// {
+//    public Guid QuizId { get; set; }
+//    public decimal Rating { get; set; }
+//    public int RatingCount { get; set; }
+// }

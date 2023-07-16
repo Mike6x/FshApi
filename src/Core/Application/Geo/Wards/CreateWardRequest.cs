@@ -24,14 +24,12 @@ public class CreateWardRequest : IRequest<DefaultIdType>
 public class CreateWardRequestHandler : IRequestHandler<CreateWardRequest, DefaultIdType>
 {
     private readonly IRepository<Ward> _repository;
-    private readonly IFileStorageService _file;
 
-    public CreateWardRequestHandler(IRepository<Ward> repository, IFileStorageService file) =>
-        (_repository, _file) = (repository, file);
+    public CreateWardRequestHandler(IRepository<Ward> repository) =>
+        _repository = repository;
 
     public async Task<DefaultIdType> Handle(CreateWardRequest request, CancellationToken cancellationToken)
     {
-
         var entity = new Ward(
             request.Order,
             request.Code,

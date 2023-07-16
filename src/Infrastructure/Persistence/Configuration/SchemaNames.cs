@@ -8,11 +8,13 @@ internal static class SchemaNames
     public static string MultiTenancy = nameof(MultiTenancy); // "MULTITENANCY";
 
     public static string Settings = nameof(Settings);
+    public static string Integrations = nameof(Integrations);
 
     public static string Geo = nameof(Geo);
 
     public static string Organization = nameof(Organization);
     public static string People = nameof(People);
+    public static string TimeOff = nameof(TimeOff);
 
     public static string Catalog = nameof(Catalog); // "CATALOG";
     public static string Property = nameof(Property);
@@ -27,4 +29,6 @@ internal static class SchemaNames
 
     public static string Elearning = nameof(Elearning);
     public static string Communication = nameof(Communication);
+
+    public static string Game = nameof(Game);
 }

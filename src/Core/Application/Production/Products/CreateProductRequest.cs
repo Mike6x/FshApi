@@ -12,7 +12,8 @@ public class CreateProductRequest : IRequest<DefaultIdType>
     public bool IsActive { get; set; }
 
     public decimal ListPrice { get; set; }
-    public string? ImagePath { get; set; }
+
+    // public string? ImagePath { get; set; }
 
     public decimal Weight { get; set; }
     public decimal Length { get; set; }

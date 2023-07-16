@@ -69,5 +69,4 @@ public class SubDepartmentsController : VersionedApiController
     {
         return Ok(await Mediator.Send(request));
     }
-
 }

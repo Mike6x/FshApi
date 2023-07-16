@@ -38,8 +38,10 @@ public class DeleteQuizRequestHandler : IRequestHandler<DeleteQuizRequest, Guid>
 
         if (!string.IsNullOrEmpty(entity.QuizPath))
         {
-            string root = Directory.GetCurrentDirectory();
-            _fileStorage.Remove(Path.Combine(root, entity.QuizPath));
+            // string root = Directory.GetCurrentDirectory();
+            // _fileStorage.Remove(Path.Combine(root, entity.QuizPath));
+
+            _fileStorage.RemoveFolder(entity.QuizPath);
         }
 
         await _repository.DeleteAsync(entity, cancellationToken);
@@ -47,4 +49,3 @@ public class DeleteQuizRequestHandler : IRequestHandler<DeleteQuizRequest, Guid>
         return request.Id;
     }
 }
-

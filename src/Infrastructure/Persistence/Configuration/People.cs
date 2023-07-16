@@ -24,20 +24,3 @@ public class EmployeeConfig : IEntityTypeConfiguration<Employee>
             .HasMaxLength(256);
     }
 }
-
-public class TitleConfig : IEntityTypeConfiguration<Title>
-{
-    public void Configure(EntityTypeBuilder<Title> builder)
-    {
-        builder
-            .ToTable("Titles", SchemaNames.People)
-            .IsMultiTenant();
-
-        builder
-            .Property(b => b.Code)
-                .HasMaxLength(256);
-        builder
-            .Property(b => b.Name)
-                .HasMaxLength(256);
-    }
-}

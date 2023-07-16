@@ -2,11 +2,9 @@
 
 namespace FSH.WebApi.Application.People.Employees;
 
-public class DeleteEmployeeRequest : IRequest<DefaultIdType>
+public class DeleteEmployeeRequest(DefaultIdType id) : IRequest<DefaultIdType>
 {
-    public DefaultIdType Id { get; set; }
-
-    public DeleteEmployeeRequest(DefaultIdType id) => Id = id;
+    public DefaultIdType Id { get; set; } = id;
 }
 
 public class DeleteEmployeeRequestHandler : IRequestHandler<DeleteEmployeeRequest, DefaultIdType>

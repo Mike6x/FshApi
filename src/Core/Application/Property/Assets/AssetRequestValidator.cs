@@ -33,7 +33,6 @@ public class CreateAssetRequestValidator : CustomValidator<CreateAssetRequest>
         RuleFor(e => e.VendorId)
             .NotEmpty()
                 .WithMessage("The Vendor is required");
-
     }
 }
 

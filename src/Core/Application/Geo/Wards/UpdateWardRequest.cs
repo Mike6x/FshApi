@@ -29,10 +29,8 @@ public class UpdateWardRequestHandler : IRequestHandler<UpdateWardRequest, Defau
     // Add Domain Events automatically by using IRepositoryWithEvents
     private readonly IRepositoryWithEvents<Ward> _repository;
     private readonly IStringLocalizer _t;
-    private readonly IFileStorageService _file;
-
-    public UpdateWardRequestHandler(IRepositoryWithEvents<Ward> repository, IStringLocalizer<UpdateWardRequestHandler> localizer, IFileStorageService file) =>
-       (_repository, _t, _file) = (repository, localizer, file);
+    public UpdateWardRequestHandler(IRepositoryWithEvents<Ward> repository, IStringLocalizer<UpdateWardRequestHandler> localizer) =>
+       (_repository, _t) = (repository, localizer);
 
     public async Task<DefaultIdType> Handle(UpdateWardRequest request, CancellationToken cancellationToken)
     {

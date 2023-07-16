@@ -4,11 +4,9 @@ using FSH.WebApi.Domain.Production;
 
 namespace FSH.WebApi.Application.Catalog.Categories;
 
-public class DeleteCategorieRequest : IRequest<Guid>
+public class DeleteCategorieRequest(Guid id) : IRequest<Guid>
 {
-    public Guid Id { get; set; }
-
-    public DeleteCategorieRequest(Guid id) => Id = id;
+    public DefaultIdType Id { get; set; } = id;
 }
 
 public class DeleteCategoryRequestHandler : IRequestHandler<DeleteCategorieRequest, Guid>

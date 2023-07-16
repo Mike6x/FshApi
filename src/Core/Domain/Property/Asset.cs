@@ -1,6 +1,7 @@
 ﻿using FSH.WebApi.Domain.Catalog;
 using FSH.WebApi.Domain.People;
 using FSH.WebApi.Domain.Purchase;
+using FSH.WebApi.Domain.Settings;
 
 namespace FSH.WebApi.Domain.Property;
 
@@ -33,13 +34,13 @@ public class Asset : AuditableEntity, IAggregateRoot
     public virtual SubCategorie? SubCategory { get; private set; }
 
     public DefaultIdType QualityStatusId { get; private set; }
-    public virtual AssetStatus QualityStatus { get; private set; } = default!;
+    public virtual Dimension QualityStatus { get; private set; } = default!;
 
     public string? Location { get; private set; }
     public DefaultIdType? EmployeeId { get; private set; }
     public virtual Employee? Employee { get; private set; }
     public DefaultIdType UsingStatusId { get; private set; }
-    public virtual AssetStatus UsingStatus { get; private set; } = default!;
+    public virtual Dimension UsingStatus { get; private set; } = default!;
 
     public Asset(
         string code,

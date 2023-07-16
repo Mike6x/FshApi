@@ -1,25 +1,36 @@
 ﻿using ClosedXML.Excel;
 using FSH.WebApi.Application.Common.DataIO;
+using FSH.WebApi.Application.Common.Exceptions;
 using FSH.WebApi.Application.Common.FileStorage;
 using FSH.WebApi.Domain.Common;
+using Microsoft.Extensions.Localization;
 using System.Data;
 using System.Text.RegularExpressions;
 
 namespace FSH.WebApi.Infrastructure.Common.Import;
 public class ExcelReader : IExcelReader
 {
+    private readonly IStringLocalizer<ExcelReader> _localizer;
+
+    public ExcelReader(IStringLocalizer<ExcelReader> localizer)
+    {
+        _localizer = localizer;
+    }
+
     public async Task<IList<T>> ToListAsync<T>(FileUploadRequest request, FileType supportedFileType, string sheetName = "Sheet1")
     {
         string base64Data = Regex.Match(request.Data, string.Format("data:{0}/(?<type>.+?),(?<data>.+)", supportedFileType.ToString().ToLower())).Groups["data"].Value;
         var streamData = new MemoryStream(Convert.FromBase64String(base64Data));
 
-        List<T> list = new List<T>();
+        List<T> list = [];
         Type typeOfObject = typeof(T);
 
         using (IXLWorkbook workbook = new XLWorkbook(streamData))
         {
             // Read the first Sheet from Excel file.
-            var worksheet = workbook.Worksheets.FirstOrDefault(w => w.Name == sheetName);
+            var worksheet = workbook.Worksheets.FirstOrDefault(w => w.Name == sheetName)
+                ?? throw new NotFoundException(string.Format(_localizer["Sheet with name {0} does not exist!"], sheetName));
+
             if (worksheet != null)
             {
                 var properties = typeOfObject.GetProperties();
@@ -41,8 +52,9 @@ public class ExcelReader : IExcelReader
                             var col = columns.SingleOrDefault(c => c.Value.ToString() == prop.Name);
                             if (col == null) continue;
 
-                            // object? obj = GetObjectByDataType(propertyType, row.Cell(col.Index).Value);
-                            object? obj = GetObjByDataType(propertyType, row.Cell(col.Index).Value);
+                            object? obj = GetObjectByDataType(propertyType, row.Cell(col.Index).Value);
+
+                            // object? obj = GetObjByDataType(propertyType, row.Cell(col.Index).Value);
                             if(obj != null) prop.SetValue(item, obj);
                         }
                         catch
@@ -60,92 +72,92 @@ public class ExcelReader : IExcelReader
         return await Task.FromResult(list);
     }
 
-    private static object? GetObjByDataType(Type propertyType, object o)
+    private static object? GetObjectByDataType(Type propertyType, XLCellValue cellValue)
     {
-        object? val;
-        if (o.ToString() == "null" || o.ToString()?.Length == 0)
+        if (cellValue.ToString() == "null" || cellValue.IsBlank)
         {
             return null;
         }
-        else
+
+        object? val;
         if (propertyType.IsEnum)
         {
-            val = Convert.ToInt32(o);
+            val = Convert.ToInt32(cellValue.GetNumber());
             return Enum.ToObject(propertyType, val);
         }
         else if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
         {
-            val = Guid.Parse(o.ToString());
+            val = Guid.Parse(cellValue.ToString());
         }
         else if (propertyType == typeof(int) || propertyType == typeof(int?))
         {
-            val = Convert.ToInt32(o);
+            val = Convert.ToInt32(cellValue.GetNumber());
         }
         else if (propertyType == typeof(decimal))
         {
-            val = Convert.ToDecimal(o);
+            val = Convert.ToDecimal(cellValue.GetNumber());
         }
         else if (propertyType == typeof(long))
         {
-            val = Convert.ToInt64(o);
+            val = Convert.ToInt64(cellValue.GetNumber());
         }
         else if (propertyType == typeof(bool) || propertyType == typeof(bool?))
         {
-            val = Convert.ToBoolean(o);
+            val = Convert.ToBoolean(cellValue.GetBoolean());
         }
         else if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
         {
-            val = Convert.ToDateTime(o);
+            val = Convert.ToDateTime(cellValue.GetDateTime());
         }
         else
         {
-            val = o.ToString();
+            val = cellValue.ToString();
         }
 
         return Convert.ChangeType(val, Nullable.GetUnderlyingType(propertyType) ?? propertyType);
     }
 
-    // private static object? GetObjectByDataType(Type propertyType, XLCellValue cellValue)
+    // private static object? GetObjByDataType(Type propertyType, object o)
     // {
-    //    if (cellValue.ToString() == "null" || cellValue.IsBlank)
+    //    object? val;
+    //    if (o.ToString() == "null" || o.ToString()?.Length == 0)
     //    {
     //        return null;
     //    }
-    //    object? val;
+    //    else
     //    if (propertyType.IsEnum)
     //    {
-    //        val = Convert.ToInt32(cellValue.GetNumber());
+    //        val = Convert.ToInt32(o);
     //        return Enum.ToObject(propertyType, val);
     //    }
     //    else if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
     //    {
-    //        val = Guid.Parse(cellValue.ToString());
+    //        val = Guid.Parse(o.ToString());
     //    }
     //    else if (propertyType == typeof(int) || propertyType == typeof(int?))
     //    {
-    //        val = Convert.ToInt32(cellValue.GetNumber());
+    //        val = Convert.ToInt32(o);
     //    }
     //    else if (propertyType == typeof(decimal))
     //    {
-    //        val = Convert.ToDecimal(cellValue.GetNumber());
+    //        val = Convert.ToDecimal(o);
     //    }
     //    else if (propertyType == typeof(long))
     //    {
-    //        val = Convert.ToInt64(cellValue.GetNumber());
+    //        val = Convert.ToInt64(o);
     //    }
     //    else if (propertyType == typeof(bool) || propertyType == typeof(bool?))
     //    {
-    //        val = Convert.ToBoolean(cellValue.GetBoolean());
+    //        val = Convert.ToBoolean(o);
     //    }
     //    else if (propertyType == typeof(DateTime) || propertyType == typeof(DateTime?))
     //    {
-    //        val = Convert.ToDateTime(cellValue.GetDateTime());
+    //        val = Convert.ToDateTime(o);
     //    }
     //    else
     //    {
-    //        val = cellValue.ToString();
+    //        val = o.ToString();
     //    }
-    //     // return val;
     //    return Convert.ChangeType(val, Nullable.GetUnderlyingType(propertyType) ?? propertyType);
     // }
 }

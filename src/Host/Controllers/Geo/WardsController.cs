@@ -62,5 +62,4 @@ public class WardsController : VersionedApiController
     {
         return Ok(await Mediator.Send(request));
     }
-
 }

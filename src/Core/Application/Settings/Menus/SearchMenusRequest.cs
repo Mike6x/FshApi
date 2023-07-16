@@ -6,11 +6,9 @@ public class SearchMenusRequest : PaginationFilter, IRequest<PaginationResponse<
 {
 }
 
-public class SearchMenusRequestHandler : IRequestHandler<SearchMenusRequest, PaginationResponse<MenuDto>>
+public class SearchMenusRequestHandler(IReadRepository<Menu> repository) : IRequestHandler<SearchMenusRequest, PaginationResponse<MenuDto>>
 {
-    private readonly IReadRepository<Menu> _repository;
-
-    public SearchMenusRequestHandler(IReadRepository<Menu> repository) => _repository = repository;
+    private readonly IReadRepository<Menu> _repository = repository;
 
     public async Task<PaginationResponse<MenuDto>> Handle(SearchMenusRequest request, CancellationToken cancellationToken)
     {

@@ -1,11 +1,11 @@
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using Asp.Versioning;
 using FSH.WebApi.Infrastructure.Auth;
 using FSH.WebApi.Infrastructure.BackgroundJobs;
 using FSH.WebApi.Infrastructure.Caching;
 using FSH.WebApi.Infrastructure.Common;
 using FSH.WebApi.Infrastructure.Cors;
 using FSH.WebApi.Infrastructure.FileStorage;
+using FSH.WebApi.Infrastructure.Integration;
 using FSH.WebApi.Infrastructure.Localization;
 using FSH.WebApi.Infrastructure.Mailing;
 using FSH.WebApi.Infrastructure.Mapping;
@@ -17,12 +17,12 @@ using FSH.WebApi.Infrastructure.Persistence;
 using FSH.WebApi.Infrastructure.Persistence.Initialization;
 using FSH.WebApi.Infrastructure.SecurityHeaders;
 using FSH.WebApi.Infrastructure.Validations;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Infrastructure.Test")]
 
@@ -34,8 +34,12 @@ public static class Startup
     {
         var applicationAssembly = typeof(FSH.WebApi.Application.Startup).GetTypeInfo().Assembly;
         MapsterSettings.Configure();
-        return services
+        services
             .AddApiVersioning()
+            .AddMvc()
+            .AddApiExplorer(o => o.SubstituteApiVersionInUrl = true);
+
+        return services
             .AddAuth(config)
             .AddBackgroundJobs(config)
             .AddCaching(config)
@@ -45,6 +49,7 @@ public static class Startup
             .AddHealthCheck()
             .AddPOLocalization(config)
             .AddMailing(config)
+            .AddNetsuiteApi(config)
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddMultitenancy()
             .AddNotifications(config)
@@ -55,7 +60,7 @@ public static class Startup
             .AddServices();
     }
 
-    private static IServiceCollection AddApiVersioning(this IServiceCollection services) =>
+    private static IApiVersioningBuilder AddApiVersioning(this IServiceCollection services) =>
         services.AddApiVersioning(config =>
         {
             config.DefaultApiVersion = new ApiVersion(1, 0);

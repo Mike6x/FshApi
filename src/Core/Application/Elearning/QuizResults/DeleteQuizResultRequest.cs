@@ -3,10 +3,9 @@ using FSH.WebApi.Domain.Elearning;
 
 namespace FSH.WebApi.Application.Elearning.QuizResults;
 
-public class DeleteQuizResultRequest : IRequest<Guid>
+public class DeleteQuizResultRequest(Guid id) : IRequest<Guid>
 {
-    public Guid Id { get; set; }
-    public DeleteQuizResultRequest(Guid id) => Id = id;
+    public Guid Id { get; set; } = id;
 }
 
 public class DeleteQuizResultRequestHandler : IRequestHandler<DeleteQuizResultRequest, Guid>

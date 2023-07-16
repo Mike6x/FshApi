@@ -6,11 +6,10 @@ public class SearchCategoriesRequest : PaginationFilter, IRequest<PaginationResp
     public CatalogType? Type { get; set; }
 }
 
-public class SearchCategoriesRequestHandler : IRequestHandler<SearchCategoriesRequest, PaginationResponse<CategorieDto>>
+public class SearchCategoriesRequestHandler(IReadRepository<Categorie> repository)
+    : IRequestHandler<SearchCategoriesRequest, PaginationResponse<CategorieDto>>
 {
-    private readonly IReadRepository<Categorie> _repository;
-
-    public SearchCategoriesRequestHandler(IReadRepository<Categorie> repository) => _repository = repository;
+    private readonly IReadRepository<Categorie> _repository = repository;
 
     public async Task<PaginationResponse<CategorieDto>> Handle(SearchCategoriesRequest request, CancellationToken cancellationToken)
     {
@@ -25,7 +24,9 @@ public class SearchCategoriesSpecification : EntitiesByPaginationFilterSpec<Cate
         : base(request) =>
             Query
                 .Include(e => e.GroupCategorie)
-                .OrderBy(e => e.Order, !request.HasOrderBy())
-                .Where(e => e.GroupCategorieId.Equals(request.GroupCategorieId!.Value), request.GroupCategorieId.HasValue)
-                .Where(e => e.Type.Equals(request.Type!.Value) || e.Type.Equals(CatalogType.General), request.Type.HasValue);
+                    .Where(e => e.GroupCategorieId.Equals(request.GroupCategorieId!.Value), request.GroupCategorieId.HasValue)
+                    .Where(e => e.Type.Equals(request.Type!.Value), request.Type.HasValue)
+
+                        // .Where(e => e.Type.Equals(request.Type!.Value) || e.Type.Equals(CatalogType.General), request.Type.HasValue)
+                        .OrderBy(e => e.Order, !request.HasOrderBy());
 }

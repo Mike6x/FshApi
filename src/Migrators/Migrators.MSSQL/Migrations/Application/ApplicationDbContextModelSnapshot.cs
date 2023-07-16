@@ -18,7 +18,7 @@ namespace Migrators.MSSQL.Migrations.Application
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Catalog")
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -322,6 +322,64 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Communication.ChatMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsImageMessage")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("ToUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatMessages", "Communication");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Elearning.Quiz", b =>
                 {
                     b.Property<Guid>("Id")
@@ -364,14 +422,29 @@ namespace Migrators.MSSQL.Migrations.Application
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("QuizModeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("QuizPath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuizTopic")
+                    b.Property<Guid>("QuizTopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuizTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("RatingCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuizType")
+                    b.Property<int?>("Sale")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")
@@ -383,6 +456,12 @@ namespace Migrators.MSSQL.Migrations.Application
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("QuizModeId");
+
+                    b.HasIndex("QuizTopicId");
+
+                    b.HasIndex("QuizTypeId");
 
                     b.ToTable("Quizs", "Elearning");
 
@@ -414,6 +493,9 @@ namespace Migrators.MSSQL.Migrations.Application
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsPass")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -432,6 +514,12 @@ namespace Migrators.MSSQL.Migrations.Application
 
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Sp")
                         .HasColumnType("decimal(18,2)");
@@ -468,6 +556,450 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.ToTable("QuizResults", "Elearning");
 
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPower", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BonusNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DrawDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DrawId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FirstPrize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Jackpot1")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Jackpot1Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Jackpot2")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Jackpot2Value")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SecondPrize")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("ThirdPrize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber4")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber5")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinNumber6")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WinStr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VnPowers", "Game");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPowerForcast", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Number1")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number10")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number11")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number12")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number13")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number14")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number15")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number16")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number17")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number18")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number19")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number20")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number21")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number22")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number23")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number24")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number25")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number26")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number27")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number28")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number29")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number3")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number30")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number31")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number32")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number33")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number34")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number35")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number36")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number37")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number38")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number39")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number4")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number40")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number41")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number42")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number43")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number44")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number45")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number46")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number47")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number48")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number49")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number5")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number50")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number51")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number52")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number53")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number54")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number55")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number6")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number7")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number8")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Number9")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VnPowerForcasts", "Game");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPowerResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Number1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number10")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number11")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number12")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number13")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number14")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number15")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number16")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number17")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number18")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number19")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number20")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number21")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number22")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number23")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number24")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number25")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number26")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number27")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number28")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number29")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number30")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number31")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number32")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number33")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number34")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number35")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number36")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number37")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number38")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number39")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number4")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number40")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number41")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number42")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number43")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number44")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number45")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number46")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number47")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number48")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number49")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number5")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number50")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number51")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number52")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number53")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number54")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number55")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number6")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number7")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number8")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number9")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoundId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubRoundId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VnPowerResults", "Game");
                 });
 
             modelBuilder.Entity("FSH.WebApi.Domain.Geo.Country", b =>
@@ -1117,6 +1649,269 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Integration.ApiSerial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CronJobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomStatusIbsm")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomStatusSys")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImportStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemBrand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemClass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemCode")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ItemSerial")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PoCreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("PoModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PoNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PoProcessStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PoStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CronJobId");
+
+                    b.ToTable("ApiSerials", "Integrations");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Leave.LeaveAllocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LeaveAllocationTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NumberOfAnnualDays")
+                        .HasColumnType("int");
+
+                    b.Property<double>("NumberOfCarryOverDays")
+                        .HasColumnType("float");
+
+                    b.Property<double>("NumberOfCompensationDays")
+                        .HasColumnType("float");
+
+                    b.Property<int>("NumberOfExtraDays")
+                        .HasColumnType("int");
+
+                    b.Property<double>("NumberOfOnHandDays")
+                        .HasColumnType("float");
+
+                    b.Property<double>("NumberOfValidDays")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Period")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LeaveAllocationTypeId");
+
+                    b.ToTable("LeaveAllocations", "TimeOff");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Leave.LeaveApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ApproverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ApproverRemarks")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FirstLeaveDay")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LastLeaveDay")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LeaveAllocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("NumberOfOnHandDays")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("NumberOfValidDays")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("RequestOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequestRemarks")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApproverId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LeaveAllocationId");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.ToTable("LeaveApplications", "TimeOff");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Organization.BusinessUnit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1465,65 +2260,6 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("SubDepartments", "Organization");
-
-                    b.HasAnnotation("Finbuckle:MultiTenant", true);
-                });
-
-            modelBuilder.Entity("FSH.WebApi.Domain.People.Title", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LastModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Titles", "People");
 
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
@@ -2290,58 +3026,6 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("FSH.WebApi.Domain.Property.AssetStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("LastModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AssetStatuses", "Property");
-
-                    b.HasAnnotation("Finbuckle:MultiTenant", true);
-                });
-
             modelBuilder.Entity("FSH.WebApi.Domain.Purchase.Vendor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2657,6 +3341,294 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.BackgroundJob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Command")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FatherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("RepeatTimes")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RunTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FatherId");
+
+                    b.ToTable("BackgroundJobs", "Settings");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.CronJob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("NumberOfDuplicated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfExisted")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfFailed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfSuccessed")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RunTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TotalRecord")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CronJobs", "Settings");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.Dimension", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<Guid?>("FatherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullNativeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("NativeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FatherId");
+
+                    b.ToTable("Dimensions", "Settings");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.EntityCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Seperator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EntityCodes", "Settings");
+
+                    b.HasAnnotation("Finbuckle:MultiTenant", true);
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Settings.Menu", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2766,64 +3738,6 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("FSH.WebApi.Infrastructure.Chat.ChatMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FromUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LastModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("ToUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromUserId");
-
-                    b.HasIndex("ToUserId");
-
-                    b.ToTable("ChatMessages", "Communication");
-
-                    b.HasAnnotation("Finbuckle:MultiTenant", true);
-                });
-
             modelBuilder.Entity("FSH.WebApi.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -2925,6 +3839,9 @@ namespace Migrators.MSSQL.Migrations.Application
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsLive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
@@ -3144,6 +4061,33 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.Navigation("Categorie");
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Elearning.Quiz", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "QuizMode")
+                        .WithMany()
+                        .HasForeignKey("QuizModeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "QuizTopic")
+                        .WithMany()
+                        .HasForeignKey("QuizTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "QuizType")
+                        .WithMany()
+                        .HasForeignKey("QuizTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("QuizMode");
+
+                    b.Navigation("QuizTopic");
+
+                    b.Navigation("QuizType");
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Elearning.QuizResult", b =>
                 {
                     b.HasOne("FSH.WebApi.Domain.Elearning.Quiz", "Quiz")
@@ -3153,6 +4097,28 @@ namespace Migrators.MSSQL.Migrations.Application
                         .IsRequired();
 
                     b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPowerForcast", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.Game.VnPower", "VnPower")
+                        .WithOne("VnPowerForcast")
+                        .HasForeignKey("FSH.WebApi.Domain.Game.VnPowerForcast", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VnPower");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPowerResult", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.Game.VnPower", "VnPower")
+                        .WithOne("VnPowerResult")
+                        .HasForeignKey("FSH.WebApi.Domain.Game.VnPowerResult", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VnPower");
                 });
 
             modelBuilder.Entity("FSH.WebApi.Domain.Geo.Country", b =>
@@ -3265,6 +4231,65 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Integration.ApiSerial", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.Settings.CronJob", "CronJob")
+                        .WithMany()
+                        .HasForeignKey("CronJobId");
+
+                    b.Navigation("CronJob");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Leave.LeaveAllocation", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.People.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "LeaveAllocationType")
+                        .WithMany()
+                        .HasForeignKey("LeaveAllocationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveAllocationType");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Leave.LeaveApplication", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.People.Employee", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverId");
+
+                    b.HasOne("FSH.WebApi.Domain.People.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FSH.WebApi.Domain.Leave.LeaveAllocation", "LeaveAllocation")
+                        .WithMany()
+                        .HasForeignKey("LeaveAllocationId");
+
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveAllocation");
+
+                    b.Navigation("LeaveType");
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Organization.Department", b =>
                 {
                     b.HasOne("FSH.WebApi.Domain.Organization.BusinessUnit", "BusinessUnit")
@@ -3311,7 +4336,7 @@ namespace Migrators.MSSQL.Migrations.Application
                         .WithMany()
                         .HasForeignKey("TeamId");
 
-                    b.HasOne("FSH.WebApi.Domain.People.Title", "Title")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "Title")
                         .WithMany()
                         .HasForeignKey("TitleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3490,7 +4515,7 @@ namespace Migrators.MSSQL.Migrations.Application
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "QualityStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "QualityStatus")
                         .WithMany()
                         .HasForeignKey("QualityStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3500,7 +4525,7 @@ namespace Migrators.MSSQL.Migrations.Application
                         .WithMany()
                         .HasForeignKey("SubCategorieId");
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "UsingStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "UsingStatus")
                         .WithMany()
                         .HasForeignKey("UsingStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3537,21 +4562,21 @@ namespace Migrators.MSSQL.Migrations.Application
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "PreviousQualityStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "PreviousQualityStatus")
                         .WithMany()
                         .HasForeignKey("PreviousQualityStatusId");
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "PreviousUsingStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "PreviousUsingStatus")
                         .WithMany()
                         .HasForeignKey("PreviousUsingStatusId");
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "QualityStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "QualityStatus")
                         .WithMany()
                         .HasForeignKey("QualityStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FSH.WebApi.Domain.Property.AssetStatus", "UsingStatus")
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "UsingStatus")
                         .WithMany()
                         .HasForeignKey("UsingStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3625,23 +4650,22 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.Navigation("Store");
                 });
 
-            modelBuilder.Entity("FSH.WebApi.Infrastructure.Chat.ChatMessage", b =>
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.BackgroundJob", b =>
                 {
-                    b.HasOne("FSH.WebApi.Infrastructure.Identity.ApplicationUser", "FromUser")
+                    b.HasOne("FSH.WebApi.Domain.Settings.BackgroundJob", "Father")
                         .WithMany()
-                        .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FatherId");
 
-                    b.HasOne("FSH.WebApi.Infrastructure.Identity.ApplicationUser", "ToUser")
-                        .WithMany()
-                        .HasForeignKey("ToUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Father");
+                });
 
-                    b.Navigation("FromUser");
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.Dimension", b =>
+                {
+                    b.HasOne("FSH.WebApi.Domain.Settings.Dimension", "Father")
+                        .WithMany("InverseFather")
+                        .HasForeignKey("FatherId");
 
-                    b.Navigation("ToUser");
+                    b.Navigation("Father");
                 });
 
             modelBuilder.Entity("FSH.WebApi.Infrastructure.Identity.ApplicationRoleClaim", b =>
@@ -3710,6 +4734,15 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.Navigation("Categories");
                 });
 
+            modelBuilder.Entity("FSH.WebApi.Domain.Game.VnPower", b =>
+                {
+                    b.Navigation("VnPowerForcast")
+                        .IsRequired();
+
+                    b.Navigation("VnPowerResult")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FSH.WebApi.Domain.Geo.Country", b =>
                 {
                     b.Navigation("States");
@@ -3774,6 +4807,11 @@ namespace Migrators.MSSQL.Migrations.Application
                     b.Navigation("InverseManager");
 
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("FSH.WebApi.Domain.Settings.Dimension", b =>
+                {
+                    b.Navigation("InverseFather");
                 });
 #pragma warning restore 612, 618
         }

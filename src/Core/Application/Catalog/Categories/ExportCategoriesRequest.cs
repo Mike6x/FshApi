@@ -5,18 +5,14 @@ namespace FSH.WebApi.Application.Catalog.Categories;
 public class ExportCategoriesRequest : BaseFilter, IRequest<Stream>
 {
     public DefaultIdType? GroupCategorieId { get; set; }
+    public CatalogType? Type { get; set; }
 }
 
-public class ExportCategoriesRequestHandler : IRequestHandler<ExportCategoriesRequest, Stream>
+public class ExportCategoriesRequestHandler(IReadRepository<Categorie> repository, IExcelWriter excelWriter)
+    : IRequestHandler<ExportCategoriesRequest, Stream>
 {
-    private readonly IReadRepository<Categorie> _repository;
-    private readonly IExcelWriter _excelWriter;
-
-    public ExportCategoriesRequestHandler(IReadRepository<Categorie> repository, IExcelWriter excelWriter)
-    {
-        _repository = repository;
-        _excelWriter = excelWriter;
-    }
+    private readonly IReadRepository<Categorie> _repository = repository;
+    private readonly IExcelWriter _excelWriter = excelWriter;
 
     public async Task<Stream> Handle(ExportCategoriesRequest request, CancellationToken cancellationToken)
     {
@@ -34,6 +30,7 @@ public class ExportCategoriesSpecification : EntitiesByBaseFilterSpec<Categorie,
         : base(request) =>
         Query
             .Include(e => e.GroupCategorie)
-            .Where(e => e.GroupCategorieId.Equals(request.GroupCategorieId!.Value), request.GroupCategorieId.HasValue)
-            .OrderBy(e => e.Order);
+                .Where(e => e.GroupCategorieId.Equals(request.GroupCategorieId!.Value), request.GroupCategorieId.HasValue)
+                .Where(e => e.Type.Equals(request.Type!.Value), request.Type.HasValue)
+                    .OrderBy(e => e.Order);
 }

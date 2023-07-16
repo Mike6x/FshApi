@@ -1,4 +1,5 @@
 ﻿using FSH.WebApi.Domain.Organization;
+using FSH.WebApi.Domain.Settings;
 
 namespace FSH.WebApi.Domain.People;
 
@@ -20,7 +21,7 @@ public class Employee : AuditableEntity, IAggregateRoot
     public string? Description { get; private set; }
 
     public DefaultIdType TitleId { get; private set; }
-    public virtual Title Title { get; private set; } = default!;
+    public virtual Dimension Title { get; private set; } = default!;
 
     public DefaultIdType? SuperiorId { get; private set; }
     public virtual Employee? Superior { get; private set; }
@@ -148,7 +149,7 @@ public class Employee : AuditableEntity, IAggregateRoot
 
         if (titleId.HasValue && titleId.Value != DefaultIdType.Empty && !TitleId.Equals(titleId.Value)) TitleId = titleId.Value;
 
-        if (superiorId.HasValue && superiorId.Value == DefaultIdType.Empty)
+        if (superiorId == DefaultIdType.Empty)
         {
             SuperiorId = null;
         }

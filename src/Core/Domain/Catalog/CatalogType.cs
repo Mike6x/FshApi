@@ -2,6 +2,7 @@
 
 public enum CatalogType
 {
+    All,
     General,
     Asset,
     Goods,

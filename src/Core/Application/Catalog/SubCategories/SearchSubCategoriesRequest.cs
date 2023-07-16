@@ -2,7 +2,7 @@
 
 public class SearchSubCategoriesRequest : PaginationFilter, IRequest<PaginationResponse<SubCategorieDto>>
 {
-    public Guid? CategorieId { get; set; }
+    public DefaultIdType? CategorieId { get; set; }
     public CatalogType? Type { get; set; }
 }
 
@@ -25,7 +25,7 @@ public class SearchSubCategoriesSpecification : EntitiesByPaginationFilterSpec<S
         : base(request) =>
             Query
                 .Include(e => e.Categorie)
-                .OrderBy(e => e.Order, !request.HasOrderBy())
                 .Where(e => e.CategorieId.Equals(request.CategorieId!.Value), request.CategorieId.HasValue)
-                .Where(e => e.Type.Equals(request.Type!.Value) || e.Type.Equals(CatalogType.General), request.Type.HasValue);
+                .Where(e => e.Type.Equals(request.Type!.Value), request.Type.HasValue)
+                    .OrderBy(e => e.Order, !request.HasOrderBy());
 }

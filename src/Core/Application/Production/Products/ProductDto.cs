@@ -70,5 +70,4 @@ public class ProductExportDto : IDto
     public DateTime CreatedOn { get; set; }
     public DefaultIdType LastModifiedBy { get; set; }
     public DateTime? LastModifiedOn { get; set; }
-
 }

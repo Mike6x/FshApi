@@ -39,12 +39,12 @@ internal partial class UserService
         string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
         RegisterUserEmailModel eMailModel = new RegisterUserEmailModel()
         {
-            Email = user.Email,
-            UserName = user.UserName,
+            Email = user.Email ?? string.Empty,
+            UserName = user.UserName ?? string.Empty,
             Url = emailVerificationUri
         };
         var mailRequest = new MailRequest(
-            new List<string> { user.Email },
+            new List<string> { user.Email ?? string.Empty },
             _t["Confirm Registration"],
             _templateService.GenerateEmailTemplate("email-confirmation", eMailModel));
         _jobService.Enqueue(() => _mailService.SendAsync(mailRequest, CancellationToken.None));

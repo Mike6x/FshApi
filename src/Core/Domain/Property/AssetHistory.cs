@@ -1,4 +1,5 @@
 ﻿using FSH.WebApi.Domain.People;
+using FSH.WebApi.Domain.Settings;
 
 namespace FSH.WebApi.Domain.Property;
 public class AssetHistory : AuditableEntity, IAggregateRoot
@@ -7,16 +8,16 @@ public class AssetHistory : AuditableEntity, IAggregateRoot
     public virtual Asset Asset { get; private set; } = default!;
 
     public DefaultIdType? PreviousQualityStatusId { get; private set; }
-    public virtual AssetStatus? PreviousQualityStatus { get; private set; }
+    public virtual Dimension? PreviousQualityStatus { get; private set; }
 
     public DefaultIdType QualityStatusId { get; private set; }
-    public virtual AssetStatus QualityStatus { get; private set; } = default!;
+    public virtual Dimension QualityStatus { get; private set; } = default!;
 
     public DefaultIdType? PreviousUsingStatusId { get; private set; }
-    public virtual AssetStatus? PreviousUsingStatus { get; private set; }
+    public virtual Dimension? PreviousUsingStatus { get; private set; }
 
     public DefaultIdType UsingStatusId { get; private set; }
-    public virtual AssetStatus UsingStatus { get; private set; } = default!;
+    public virtual Dimension UsingStatus { get; private set; } = default!;
 
     public DefaultIdType? EmployeeId { get; private set; }
     public virtual Employee? Employee { get; private set; }

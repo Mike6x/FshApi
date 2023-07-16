@@ -1,4 +1,6 @@
-﻿namespace FSH.WebApi.Domain.Elearning;
+﻿using FSH.WebApi.Domain.Settings;
+
+namespace FSH.WebApi.Domain.Elearning;
 public class Quiz : AuditableEntity, IAggregateRoot
 {
     public string Code { get; private set; } = default!;
@@ -8,8 +10,18 @@ public class Quiz : AuditableEntity, IAggregateRoot
     public DateTime StartTime { get; private set; }
     public DateTime EndTime { get; private set; }
     public bool IsActive { get; private set; }
-    public QuizType QuizType { get; private set; } = QuizType.graded;
-    public QuizTopic QuizTopic { get; private set; } = QuizTopic.General;
+
+    public DefaultIdType QuizTypeId { get; private set; }
+    public virtual Dimension QuizType { get; private set; } = default!;
+    public DefaultIdType QuizTopicId { get; private set; }
+    public virtual Dimension QuizTopic { get; private set; } = default!;
+    public DefaultIdType QuizModeId { get; private set; }
+    public virtual Dimension QuizMode { get; private set; } = default!;
+
+    public decimal? Price { get; private set; }
+    public int? Sale { get; private set; }
+    public int? RatingCount { get; private set; }
+    public decimal? Rating { get; private set; }
 
     public Quiz(
         string code,
@@ -19,8 +31,13 @@ public class Quiz : AuditableEntity, IAggregateRoot
         DateTime? startTime,
         DateTime? endTime,
         bool isActive,
-        QuizType quizType,
-        QuizTopic quizTopic)
+        DefaultIdType quizTypeId,
+        DefaultIdType quizTopicId,
+        DefaultIdType quizModeId,
+        decimal? price,
+        int? sale,
+        int? ratingCount,
+        decimal? rating)
     {
         Code = code;
         Name = name;
@@ -29,12 +46,17 @@ public class Quiz : AuditableEntity, IAggregateRoot
         StartTime = startTime ?? DateTime.MinValue;
         EndTime = endTime ?? DateTime.UtcNow;
         IsActive = endTime >= DateTime.Today && isActive;
-        QuizType = quizType;
-        QuizTopic = quizTopic;
+        QuizTypeId = quizTypeId;
+        QuizTopicId = quizTopicId;
+        QuizModeId = quizModeId;
+        Sale = sale;
+        Price = price;
+        RatingCount = ratingCount;
+        Rating = rating;
     }
 
     public Quiz()
-    : this(string.Empty, string.Empty, string.Empty, string.Empty, DateTime.MinValue, DateTime.UtcNow, false, QuizType.graded, QuizTopic.General)
+    : this(string.Empty, string.Empty, string.Empty, string.Empty, DateTime.MinValue, DateTime.UtcNow, false, DefaultIdType.Empty, DefaultIdType.Empty, DefaultIdType.Empty, null, null, null, null)
     {
     }
 
@@ -46,8 +68,13 @@ public class Quiz : AuditableEntity, IAggregateRoot
     DateTime? startTime,
     DateTime? endTime,
     bool isActive,
-    QuizType? quizType,
-    QuizTopic? quizTopic)
+    DefaultIdType? quizTypeId,
+    DefaultIdType? quizTopicId,
+    DefaultIdType? quizModeId,
+    decimal? price,
+    int? sale,
+    int? ratingCount,
+    decimal? rating)
     {
         if (code is not null && Code?.Equals(code) is not true) Code = code;
         if (name is not null && Name?.Equals(name) is not true) Name = name;
@@ -58,8 +85,14 @@ public class Quiz : AuditableEntity, IAggregateRoot
 
         IsActive = EndTime >= DateTime.Today && isActive;
 
-        if (quizType is not null && !QuizType.Equals(quizType)) QuizType = (QuizType)quizType;
-        if (quizTopic is not null && QuizTopic.Equals(quizTopic) is not true) QuizTopic = (QuizTopic)quizTopic;
+        if (quizTypeId.HasValue && quizTypeId.Value != DefaultIdType.Empty && !QuizTypeId.Equals(quizTypeId.Value)) QuizTypeId = quizTypeId.Value;
+        if (quizTopicId.HasValue && quizTopicId.Value != DefaultIdType.Empty && !QuizTopicId.Equals(quizTopicId.Value)) QuizTopicId = quizTopicId.Value;
+        if (quizModeId.HasValue && quizModeId.Value != DefaultIdType.Empty && !QuizModeId.Equals(quizModeId.Value)) QuizModeId = quizModeId.Value;
+
+        if (sale.HasValue && sale != Sale) Sale = sale;
+        if (price.HasValue && price != Price) Price = price;
+        if (ratingCount.HasValue && ratingCount != RatingCount) RatingCount = ratingCount;
+        if (rating.HasValue && rating != Rating) Rating = rating;
 
         return this;
     }

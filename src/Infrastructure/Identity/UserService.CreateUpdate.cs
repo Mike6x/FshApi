@@ -110,7 +110,8 @@ internal partial class UserService
             LastName = request.LastName,
             UserName = request.UserName ?? request.Email,
             PhoneNumber = request.PhoneNumber,
-            IsActive = true
+            IsActive = true,
+            IsLive = false
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -163,7 +164,10 @@ internal partial class UserService
         }
 
         user.EmailConfirmed = request.IsActive && request.EmailConfirmed;
+
         user.IsActive = request.IsActive;
+        user.IsLive = request.IsLive ?? user.IsLive;
+
         user.LockoutEnd = request.LockoutEnd;
 
         var result = await _userManager.UpdateAsync(user);

@@ -1,0 +1,38 @@
+[
+  {
+    "Id": "ca43337c-c9bc-4c18-98e1-3bf8694f9fb7",
+    "Order": 1,
+    "Code": "RAZR",
+    "Name": "Razor",
+    "ImageUrl": "https://fullstackhero.net/images/navbar-logo.png",
+    "Description": "Sample Data",
+    "IsActive": true
+  },
+  {
+    "Id": "538f5ce7-9bd4-4309-8e62-6e566b01fdfe",
+    "Order": 2,
+    "Code": "SAMG",
+    "Name": "Samsung",
+    "ImageUrl": "https://fullstackhero.net/images/navbar-logo.png",
+    "Description": "Sample Data",
+    "IsActive": true
+  },
+  {
+    "Id": "d72ee823-f4e6-43c4-84b5-0e27f8c290f2",
+    "Order": 3,
+    "Code": "MSI",
+    "Name": "MSI",
+    "ImageUrl": "https://fullstackhero.net/images/navbar-logo.png",
+    "Description": "Sample Data",
+    "IsActive": true
+  },
+  {
+    "Id": "5a1488ed-8e5c-40f9-ab48-6b73ecc1d6a0",
+    "Order": 4,
+    "Code": "HUAI",
+    "Name": "Huawei",
+    "ImageUrl": "https://fullstackhero.net/images/navbar-logo.png",
+    "Description": "Sample Data",
+    "IsActive": true
+  }
+]

@@ -1,5 +1,4 @@
-﻿using FSH.WebApi.Application.Property.AssetStatuses;
-using FSH.WebApi.Domain.Property;
+﻿using FSH.WebApi.Domain.Property;
 
 namespace FSH.WebApi.Application.Property.Assets;
 

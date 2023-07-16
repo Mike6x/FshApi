@@ -10,8 +10,12 @@ public class CreateQuizRequest : IRequest<Guid>
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }
     public bool IsActive { get; set; }
-    public QuizType QuizType { get; set; } = QuizType.graded;
-    public QuizTopic QuizTopic { get; set; } = QuizTopic.General;
+
+    public DefaultIdType QuizTypeId { get; set; }
+    public DefaultIdType QuizTopicId { get; set; }
+    public DefaultIdType QuizModeId { get; set; }
+
+    public decimal Price { get; private set; }
 
     public FileUploadRequest? QuizMedia { get; set; }
 }
@@ -27,17 +31,30 @@ public class CreateQuizRequestHandler : IRequestHandler<CreateQuizRequest, Guid>
 
     public async Task<Guid> Handle(CreateQuizRequest request, CancellationToken cancellationToken)
     {
-        string quizPath = await _file.UploadAsync<Quiz>(request.QuizMedia, FileType.QuizMedia, cancellationToken);
+        string mediaPath = await _file.UploadAsync<Quiz>(request.QuizMedia, FileType.QuizMedia, cancellationToken);
+
+        string? quizPath = string.Empty;
+        if (!string.IsNullOrEmpty(mediaPath))
+        {
+            quizPath = _file.UnZip(mediaPath);
+            _file.RemoveFile(mediaPath);
+        }
+
         var entity = new Quiz(
                 request.Code,
                 request.Name,
                 request.Description ?? string.Empty,
-                quizPath,
+                quizPath ?? string.Empty,
                 request.StartTime,
                 request.EndTime,
                 request.IsActive,
-                request.QuizType,
-                request.QuizTopic);
+                request.QuizTypeId,
+                request.QuizTopicId,
+                request.QuizModeId,
+                request.Price,
+                null,
+                null,
+                null);
 
         await _repository.AddAsync(entity, cancellationToken);
 

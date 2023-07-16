@@ -1,0 +1,12 @@
+{
+  "NetsuiteSettings": {
+    "AccountId": "7258775",
+    "ClientId": "a93ef868141ac167e735667ec3816e5c14cddf3b076310f6ef76f992d1d64dc8",
+    "ClientSecret": "934fee3b30e2d0e11580d277d07f2a9f01ada76ca41aa64370c04404f863fabf",
+    "TokenId": "32a96e6b72b387d149051f875d051eac5766903a9ede8fd39a885d3f3349b87e",
+    "TokenSecret": "1d3636e46de5cd55e9af683ee8c2bde18a01fc3a526719368c7fda0e9c638e49",
+    "Realm": "7258775",
+    "ScriptId": "2526",
+    "DeploymentId": "1"
+  }
+}

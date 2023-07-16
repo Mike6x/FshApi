@@ -38,7 +38,6 @@ public class CreateEmployeeRequestValidator : CustomValidator<CreateEmployeeRequ
         RuleFor(e => e.BusinessUnitId)
             .NotEmpty()
                 .WithMessage(" The Business Unit is required");
-
     }
 }
 

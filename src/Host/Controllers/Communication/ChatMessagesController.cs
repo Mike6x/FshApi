@@ -1,28 +1,32 @@
-﻿using FSH.WebApi.Infrastructure.Chat;
+﻿using FSH.WebApi.Application.Communication.Chat;
+using FSH.WebApi.Domain.Communication;
 
 namespace FSH.WebApi.Host.Controllers.Communication;
 
 public class ChatMessagesController : VersionedApiController
 {
-    // private readonly ICurrentUser _currentUserService;
-    // public ChatMessagesController(ICurrentUser currentUserService)
-    // {
-    //    _currentUserService = currentUserService;
-    // }
-    // [HttpGet("{contactId}/conversation")]
-    // [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
-    // [OpenApiOperation("Get ChatMessage Conversation with Other .", "")]
-    // public async Task<List<ChatMessageDto>> GetChatHistoryAsync(string contactId)
-    // {
-    //    return await Mediator.Send(new GetChatConversationRequest(_currentUserService.GetUserId().ToString(), contactId));
-    // }
+    [HttpPost("remove")]
+    [MustHavePermission(FSHAction.Delete, FSHResource.ChatMessages)]
+    [OpenApiOperation("Remove messages of one user.", "")]
+    public Task<List<ChatMessage>> RemoveAsync(RemoveChatMessagesRequest request)
+    {
+        return Mediator.Send(request);
+    }
 
     [HttpGet("conversation/{userId}/{contactId}")]
     [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
-    [OpenApiOperation("Get ChatMessage Conversation with Other .", "")]
+    [OpenApiOperation("Get ChatMessage Conversation between two users.", "")]
     public async Task<List<ChatMessageDto>> GetConversationAsync(string userId, string contactId)
     {
         return await Mediator.Send(new GetChatConversationRequest(userId, contactId));
+    }
+
+    [HttpPost("GetList")]
+    [MustHavePermission(FSHAction.View, FSHResource.ChatMessages)]
+    [OpenApiOperation("Get ChatMessage between two users.", "")]
+    public Task<List<ChatMessageDto>> GetListAsync(GetChatMessagesRequest request)
+    {
+        return Mediator.Send(request);
     }
 
     [HttpPost("search")]
